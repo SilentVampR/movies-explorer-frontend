@@ -13,10 +13,12 @@
 
 <body class="page">
   <header class="header header_main-page">
-    <div class="logo"></div>
-    <div class="top-menu">
-      <a href="#" class="top-menu__link">Регистрация</a>
-      <button class="signin-button">Войти</button>
+    <div class="header__container">
+      <div class="logo"></div>
+      <div class="top-menu">
+        <a href="#" class="top-menu__link">Регистрация</a>
+        <button class="signin-button">Войти</button>
+      </div>
     </div>
   </header>
   <main class="main">
@@ -33,12 +35,20 @@
     <section class="section about">
       <a name="about"></a>
       <h2 class="section__title">О проекте</h2>
-      <h3 class="about__title">Дипломный проект включал 5&nbsp;этапов</h3>
-      <p class="about__text">Составление плана, работу над бэкендом, вёрстку, добавление функциональности и финальные
-        доработки.</p>
-      <h3 class="about__title">На выполнение диплома ушло 5&nbsp;недель</h3>
-      <p class="about__text">У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было соблюдать, чтобы успешно
-        защититься.</p>
+      <div class="about__container">
+        <article>
+          <h3 class="about__title">Дипломный проект включал 5&nbsp;этапов</h3>
+          <p class="about__text">Составление плана, работу над бэкендом, вёрстку, добавление функциональности и
+            финальные
+            доработки.</p>
+        </article>
+        <article>
+          <h3 class="about__title">На выполнение диплома ушло 5&nbsp;недель</h3>
+          <p class="about__text">У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было соблюдать, чтобы
+            успешно
+            защититься.</p>
+        </article>
+      </div>
       <div class="stage">
         <div class="stage__column stage__column_color_green">1 неделя</div>
         <div class="stage__column stage__column_color_gray">4 недели</div>
@@ -65,16 +75,24 @@
     <section class="section student">
       <a name="student"></a>
       <h2 class="section__title">Студент</h2>
-      <img src="../src/images/me_avatar.jpg" alt="Фото Евгений Корсунов" class="student__photo">
-      <div>
-        <h3 class="student__name">Евгений</h3>
-        <p class="student__subtitle">Web-разработчик, 38 лет</p>
-        <p class="student__about">Родился и живу в Благовещенске, амурской области. Более 10 лет работаю системным
-          администриром и иногда практикуюсь в программировании и веб-разработке.</p>
-        <ul class="student__links">
-          <li><a href="#" class="student__link">Instagram</a></li>
-          <li><a href="#" class="student__link">GitHub</a></li>
-        </ul>
+      <div class="student__container">
+        <img src="../src/images/me_avatar.jpg" alt="Фото Евгений Корсунов" class="student__photo">
+        <div>
+          <div class="student__about-container">
+            <div>
+              <h3 class="student__name">Евгений</h3>
+              <p class="student__subtitle">Web-разработчик, 38 лет</p>
+              <p class="student__about">Родился и живу в Благовещенске, амурской области. Более 10 лет работаю системным
+                администриром и иногда практикуюсь в программировании и веб-разработке.</p>
+              <p class="student__about">Помимо веб-разработки обладаю навыками работы в графических (векторные,
+                растровые) и видео редакторах.</p>
+            </div>
+            <ul class="student__links">
+              <li><a href="#" class="student__link">Instagram</a></li>
+              <li><a href="#" class="student__link">GitHub</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
       <div class="portfolio">
         <h4 class="portfolio__title">Портфолио</h4>
@@ -100,12 +118,14 @@
   </main>
   <footer class="footer">
     <p class="footer__about">Учебный проект Яндекс.Практикум х BeatFilm.</p>
-    <ul class="footer__links">
-      <li class="footer__link-container"><a href="#" class="footer__link">Яндекс.Практикум</a></li>
-      <li class="footer__link-container"><a href="#" class="footer__link">Github</a></li>
-      <li class="footer__link-container"><a href="#" class="footer__link">Facebook</a></li>
-    </ul>
-    <p class="footer__copyright">&copy;2022</p>
+    <div class="footer__container">
+      <ul class="footer__links">
+        <li class="footer__link-container"><a href="#" class="footer__link">Яндекс.Практикум</a></li>
+        <li class="footer__link-container"><a href="#" class="footer__link">Github</a></li>
+        <li class="footer__link-container"><a href="#" class="footer__link">Facebook</a></li>
+      </ul>
+      <p class="footer__copyright">&copy;2022</p>
+    </div>
   </footer>
 </body>
 
