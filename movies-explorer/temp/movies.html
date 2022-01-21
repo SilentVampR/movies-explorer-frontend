@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru" class="html">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Учебный проект студента факультета Веб-разработки :: Корсунов Евгений</title>
+  <link rel="stylesheet" href="../src/vendor/normalize.css">
+  <link rel="stylesheet" href="../src/vendor/fonts/inter.css">
+  <link rel="stylesheet" href="./index.css">
+</head>
+
+<body class="page">
+  <div id="root">
+    <header class="header">
+      <div class="header__container">
+        <div class="logo"></div>
+        <div class="top-menu">
+          <!--<a href="#" class="top-menu__link">Регистрация</a>
+          <button class="signin-button">Войти</button>-->
+          <a href="#" class="top-menu__link top-menu__link_type_account">Аккаунт</a>
+          <button class="burger-menu"></button>
+        </div>
+      </div>
+    </header>
+    <main class="main">
+      <section class="search">
+        <form class="search-form">
+          <input class="search-form__input" required placeholder="Фильм">
+          <input type="search-form__checkbox" type="checkbox" hidden>
+          <button class="search-form__button"></button>
+        </form>
+        <div class="short-movies">
+          <p class="short-movies__label">Короткометражки</p>
+          <button class="checkbox-stylized"></button>
+        </div>
+      </section>
+      <section class="movies">
+        <div class="movies__container">
+          <div class="movie">
+            <img src="../src/images/test-pic-1.jpg" alt="33 слова о дизайне" class="movie__thumb">
+            <div class="movie__footer">
+              <h2 class="movie__title">33 слова о дизайне</h2>
+              <button class="movie__button movie__button_type_saved"></button>
+            </div>
+            <p class="movie__duration">1ч 47м</p>
+          </div>
+          <div class="movie">
+            <img src="../src/images/test-pic-2.jpg" alt="Киноальманах «100 лет дизайна»" class="movie__thumb">
+            <div class="movie__footer">
+              <h2 class="movie__title">Киноальманах «100 лет дизайна»</h2>
+              <button class="movie__button"></button>
+            </div>
+            <p class="movie__duration">1ч 47м</p>
+          </div>
+          <div class="movie">
+            <img src="../src/images/test-pic-3.jpg" alt="В погоне за Бенкси" class="movie__thumb">
+            <div class="movie__footer">
+              <h2 class="movie__title">В погоне за Бенкси</h2>
+              <button class="movie__button movie__button_type_saved"></button>
+            </div>
+            <p class="movie__duration">1ч 47м</p>
+          </div>
+          <div class="movie">
+            <img src="../src/images/test-pic-4.jpg" alt="Баския: Взрыв реальности" class="movie__thumb">
+            <div class="movie__footer">
+              <h2 class="movie__title">Баския: Взрыв реальности</h2>
+              <button class="movie__button"></button>
+            </div>
+            <p class="movie__duration">1ч 47м</p>
+          </div>
+          <div class="movie">
+            <img src="../src/images/test-pic-5.jpg" alt="Бег это свобода" class="movie__thumb">
+            <div class="movie__footer">
+              <h2 class="movie__title">Бег это свобода</h2>
+              <button class="movie__button movie__button_type_delete"></button>
+            </div>
+            <p class="movie__duration">1ч 47м</p>
+          </div>
+        </div>
+        <button class="show-more-movies">Ещё</button>
+      </section>
+    </main>
+    <footer class="footer">
+      <p class="footer__about">Учебный проект Яндекс.Практикум х BeatFilm.</p>
+      <div class="footer__container">
+        <ul class="footer__links">
+          <li class="footer__link-container"><a href="#" class="footer__link">Яндекс.Практикум</a></li>
+          <li class="footer__link-container"><a href="#" class="footer__link">Github</a></li>
+          <li class="footer__link-container"><a href="#" class="footer__link">Facebook</a></li>
+        </ul>
+        <p class="footer__copyright">&copy;2022</p>
+      </div>
+    </footer>
+  </div>
+</body>
+
+</html>
