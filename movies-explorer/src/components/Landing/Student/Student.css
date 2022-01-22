@@ -1,0 +1,151 @@
+.student {
+  padding: 70px 18px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 768px) {
+  .student {
+    padding: 90px 50px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .student {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 110px 70px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .student__container {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 15.67vw;
+    margin-bottom: 90px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .student__container {
+    gap: 270px;
+    margin-bottom: 100px;
+  }
+}
+
+.student__photo {
+  width: 100%;
+  max-width: 292px;
+  max-height: 352px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+@media screen and (min-width: 768px) {
+  .student__photo {
+    max-width: 255px;
+    max-height: 307px;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .student__photo {
+    max-width: 270px;
+    max-height: 327px;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .student__about-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+}
+
+.student__name {
+  color: white;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 36px;
+  letter-spacing: -0.04em;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .student__name {
+    font-size: 40px;
+    line-height: 40px;
+  }
+}
+
+.student__subtitle {
+  color: white;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 16px;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .student__subtitle {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+.student__about {
+  color: white;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 16px;
+  padding: 0;
+  margin: 0 0 10px;
+}
+
+.student__about:last-of-type {
+  margin: 0 0 40px;
+}
+
+@media screen and (min-width: 768px) {
+  .student__about {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+.student__links {
+  list-style: none;
+  margin: 0 0 70px;
+  padding: 0;
+  display: flex;
+}
+
+@media screen and (min-width: 768px) {
+  .student__links {
+    margin: 0;
+  }
+}
+
+.student__link {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  margin: 0 26px 0 0;
+  padding: 0;
+  color: white;
+  text-decoration: none;
+}

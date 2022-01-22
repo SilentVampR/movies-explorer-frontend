@@ -8,6 +8,12 @@
   height: 100%;
 }
 
+.page__wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 .header_main-page {
   background-color: #073042;
 }
@@ -50,7 +56,7 @@
 
 .top-menu__link {
   font-family: Inter, Arial, Helvetica, sans-serif;
-  font-weight: 400;
+  font-weight: normal;
   font-size: 10px;
   line-height: 16px;
   color: white;
@@ -94,7 +100,7 @@
 
 .signin-button {
   font-family: Inter, Arial, Helvetica, sans-serif;
-  font-weight: 500; /*добавить 500 шрифт*/
+  font-weight: 500;
   font-size: 10px;
   line-height: 16px;
   background-color: #3DDC84;
@@ -642,14 +648,16 @@
 }
 
 .footer {
-  padding: 80px 10px 10px;
+  padding: 80px 10px 0;
   box-sizing: border-box;
   width: 100%;
+  margin: auto auto 10px;
 }
 
 @media screen and (min-width: 768px) {
   .footer {
-    padding: 80px 30px 20px;
+    padding: 80px 30px 0;
+    margin-bottom: 20px
   }
 }
 
@@ -657,7 +665,6 @@
   .footer {
     max-width: 1280px;
     padding: 80px 30px 20px;
-    margin: 0 auto;
   }
 }
 
