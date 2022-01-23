@@ -1,0 +1,26 @@
+.to-the-top {
+  position: fixed;
+  left: 85vw;
+  bottom: 70px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #424242;
+  background-color: #202020;
+  cursor: pointer;
+  background-image: url(../../../images/arrow_up.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  rotate: -45deg;
+  transition: all .3s ease-in-out;
+}
+
+@media screen and (min-width: 768px) {
+  .to-the-top {
+    left: 91vw;
+  }
+}
+
+.to-the-top:hover {
+  border-color: #3DDC84;
+}

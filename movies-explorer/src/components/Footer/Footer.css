@@ -88,6 +88,7 @@
   padding: 0;
   margin: 0;
   text-decoration: none;
+  transition: all .3s ease-in-out;
 }
 
 @media screen and (min-width: 768px) {
@@ -95,6 +96,10 @@
     font-size: 13px;
     line-height: 16px;
   }
+}
+
+.footer__link:hover {
+  color: #8B8B8B;
 }
 
 .footer__copyright {

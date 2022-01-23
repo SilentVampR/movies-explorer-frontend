@@ -18,7 +18,7 @@ function MainMenu() {
           <li>
             <AnchorLink
             smooth={true}
-            duration={500}
+            duration={550}
             className="main-menu__link"
             to="tech">
             Технологии
@@ -27,7 +27,7 @@ function MainMenu() {
           <li>
             <AnchorLink
             smooth={true}
-            duration={500}
+            duration={600}
             className="main-menu__link"
             to="student">
               Студент

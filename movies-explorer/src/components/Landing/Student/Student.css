@@ -148,4 +148,9 @@
   padding: 0;
   color: white;
   text-decoration: none;
+  transition: all .3s ease-in-out;
+}
+
+.student__link:hover {
+  color: #8B8B8B;
 }

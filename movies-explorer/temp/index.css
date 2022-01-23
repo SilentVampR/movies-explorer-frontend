@@ -43,15 +43,22 @@
 }
 
 .logo {
-  background: url(../src/images/logo.svg);
+  background-image: url(../src/images/logo.svg);
   width: 38px;
   height: 38px;
+  background-color: transparent;
+  background-position: center;
+  box-sizing: border-box;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .top-menu {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .top-menu__link {

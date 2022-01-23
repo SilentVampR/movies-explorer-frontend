@@ -1,0 +1,79 @@
+.movie {
+  background-color: #222222;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.movie__thumb {
+  width: 93.75vw;
+  height: 52.5vw;
+  max-width: 364px;
+  max-height: 203px;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media screen and (min-width: 768px) {
+  .movie__thumb {
+    width: 339px;
+    height: 190px;
+    max-width: unset;
+    max-height: unset;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .movie__thumb {
+    width: 364px;
+    height: 203px;
+  }
+}
+
+.movie__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 7px auto 6px;
+}
+
+.movie__title {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  color: white;
+  padding: 0;
+  margin: 0 0 0 14px;
+}
+
+.movie__button {
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  background-image: url(../../images/black_heart.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  padding: 0;
+  margin: 0 10px 0 0;
+  cursor: pointer;
+}
+
+.movie__button_type_saved {
+  background-image: url(../../images/red_heart.svg);
+}
+
+.movie__button_type_delete {
+  background-image: url(../../images/cross.svg);
+}
+
+.movie__duration {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 10px;
+  line-height: 12px;
+  color: #8B8B8B;
+  padding: 0;
+  margin: 0 0 14px 14px;
+}

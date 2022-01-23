@@ -19,8 +19,14 @@
         <div class="top-menu">
           <!--<a href="#" class="top-menu__link">Регистрация</a>
           <button class="signin-button">Войти</button>-->
-          <a href="#" class="top-menu__link top-menu__link_type_account">Аккаунт</a>
-          <button class="burger-menu"></button>
+          <div class="top-menu__left">
+            <a href="#" class="top-menu__link">Фильмы</a>
+            <a href="#" class="top-menu__link">Сохранённые фильмы</a>
+          </div>
+          <div class="top-menu__right">
+            <a href="#" class="top-menu__link top-menu__link_type_account">Аккаунт</a>
+            <button class="burger-menu"></button>
+          </div>
         </div>
       </div>
     </header>
@@ -28,7 +34,7 @@
       <section class="search">
         <form class="search-form">
           <input class="search-form__input" required placeholder="Фильм">
-          <input type="search-form__checkbox" type="checkbox" hidden>
+          <input class="search-form__checkbox" type="checkbox" hidden>
           <button class="search-form__button"></button>
         </form>
         <div class="short-movies">
