@@ -61,6 +61,17 @@
   width: 100%;
 }
 
+.top-menu__left {
+  display: none;
+}
+
+@media screen and (min-width: 1024px){
+  .top-menu__left {
+    display: inline-block;
+    margin-left: 44px;
+  }
+}
+
 .top-menu__link {
   font-family: Inter, Arial, Helvetica, sans-serif;
   font-weight: normal;

@@ -1,8 +1,9 @@
 import './Logo.css';
+import { Link, } from "react-router-dom";
 
-function Logo() {
+function Logo(props) {
   return (
-    <div className="logo"></div>
+    (props.uri === "/") ? <div className="logo"></div> : <Link to="/" className="logo"></Link>
   );
 }
 

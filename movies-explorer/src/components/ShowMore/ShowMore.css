@@ -1,0 +1,29 @@
+.show-more-movies {
+  display: inherit;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 10px;
+  line-height: 12px;
+  color: white;
+  padding: 0;
+  border: none;
+  background-color: #2F2F2F;
+  border-radius: 6px;
+  width: 100%;
+  min-height: 36px;
+  cursor: pointer;
+  max-width: 364px;
+  margin: 50px auto 80px;
+}
+
+@media screen and (min-width: 768px) {
+  .show-more-movies {
+    max-width: calc(339px * 2 + 30px);
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .show-more-movies {
+    max-width: calc(364px * 3 + 24px * 2);
+  }
+}

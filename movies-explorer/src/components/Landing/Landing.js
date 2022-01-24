@@ -5,7 +5,6 @@ import MainMenu from './MainMenu/MainMenu';
 import About from './About/About';
 import Tech from './Tech/Tech';
 import Student from './Student/Student';
-import ToTopButton from './ToTopButton/ToTopButton';
 
 function Landing() {
   return (
@@ -15,7 +14,6 @@ function Landing() {
       <About />
       <Tech />
       <Student />
-      <ToTopButton />
     </>
   );
 }

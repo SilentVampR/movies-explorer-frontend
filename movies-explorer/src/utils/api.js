@@ -1,4 +1,4 @@
-import { beatFilmApiURL } from './constants';
+import { beatFilmApiURL, myApiURL } from './constants';
 
 class Api {
   constructor({apiURL, headers}){
@@ -13,7 +13,7 @@ class Api {
     return Promise.reject(`${text} - ${res.status}`);
   }
 
-  getInitialFilms() {
+  getInitialMovies() {
     return fetch(this._apiURL + '/beatfilm-movies', {
       headers: this._headers
     })
@@ -21,6 +21,8 @@ class Api {
         return this._checkResponse(res, 'Ошибка получения фильмов с сервера');
       })
   }
+
+  getSaved
 }
 const api = new Api({ apiURL:beatFilmApiURL, headers: {
   'Content-Type': 'application/json; charset=UTF-8'
