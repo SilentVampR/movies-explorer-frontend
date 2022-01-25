@@ -13,14 +13,18 @@ import Signup from '../Signup/Signup';
 import Footer from '../Footer/Footer';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
+import SideMenu from '../SideMenu/SideMenu';
+import NotFound from '../NotFound/NotFound';
+import Profile from '../Profile/Profile';
 
 function App() {
   /*STATES*/
   const [isLoading, setIsLoading] = useState(false);
   const [loggedIn, setloggedIn] = useState(true); //Сменить на false после подключения API
-  const [currentUser, setCurentUser] = useState({ name: '', email: '' });
+  const [currentUser, setCurentUser] = useState({ name: 'Евгений', email: 'johnny.1983@yandex.ru' }); //Сменить на пустые значения, после подключения API
   const [films, setFilms] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
+  const [isSideMenuOpened, setIsSideMenuOpened] = useState(false);
 
   useEffect(() => {
     setSavedMovies( //Временное решение с сохраненными фильмами
@@ -178,6 +182,14 @@ function App() {
     )
   }, []);
 
+  const handlerBurgerClick = () => {
+    setIsSideMenuOpened(true);
+  }
+
+  const handleMenuClose = () => {
+    setIsSideMenuOpened(false);
+  }
+
   useEffect(() => {
     setIsLoading(true);
     api.getInitialMovies()
@@ -193,34 +205,53 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <BrowserRouter>
-        <Header
-          loggedIn={loggedIn}
-        />
+        <Switch>
+          <Route
+            path="/(|movies|saved-movies|profile)"
+            component={() => (
+              <Header
+                loggedIn={loggedIn}
+                handlerBurgerClick={handlerBurgerClick}
+              />
+            )}
+          />
+        </Switch>
         <main className="main">
           <Switch>
             <Route
-              component={() => (<Landing loggedIn={loggedIn} />)}
+              component={() => (
+                <Landing
+                  loggedIn={loggedIn}
+                />
+              )}
               path="/"
               exact
             />
-            {/*<ProtectedRoute
-            component={ImagePopup}
-            loggedIn={loggedIn}
-            isOpen={isImagePopupOpen}
-            onClose={closeAllPopups}
-            card={selectedCard}
-            onOverlayClick={handleOverlayClick}
-          />*/}
             <Route
               path="/movies"
               exact
-              //component={Movies}
-              component={() => (<Movies films={films} savedMovies={savedMovies} isLoading={isLoading} />)}
+              component={() => (
+                <Movies
+                  films={films}
+                  savedMovies={savedMovies}
+                  isLoading={isLoading}
+                />
+              )}
             />
             <Route
               path="/saved-movies"
-              //component={Movies}
-              component={() => (<SavedMovies films={savedMovies} isLoading={isLoading} />)}
+              exact
+              component={() => (
+                <SavedMovies
+                  films={savedMovies}
+                  isLoading={isLoading}
+                />
+              )}
+            />
+            <Route
+              path="/profile"
+              exact
+              component={Profile}
             />
             <Route
               path="/signin"
@@ -230,9 +261,23 @@ function App() {
               path="/signup"
               component={Signup}
             />
+            <Route
+              path="*"
+              component={NotFound}
+            />
           </Switch>
         </main>
-        <Footer />
+        <Switch>
+          <Route
+            path="/(|movies|saved-movies)"
+            component={Footer}
+          />
+        </Switch>
+
+        <SideMenu
+          isSideMenuOpened={isSideMenuOpened}
+          handleMenuClose={handleMenuClose}
+        />
       </BrowserRouter>
     </CurrentUserContext.Provider>
   );

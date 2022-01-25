@@ -41,7 +41,7 @@
 
 .top-menu__link {
   font-family: Inter, Arial, Helvetica, sans-serif;
-  font-weight: 400;
+  font-weight: normal;
   font-size: 10px;
   line-height: 16px;
   color: white;
@@ -95,7 +95,13 @@
     display: block;
     border-radius: 4px;
     margin-left: 17px;
+    transition: all .3s ease-in-out;
   }
+
+  .top-menu__link_type_account:hover::after {
+    opacity: 0.6;
+  }
+
 }
 
 .signin-button {
@@ -136,17 +142,22 @@
   height: 44px;
   background-image: url(../../images/burger-menu.svg);
   background-repeat: no-repeat;
-  background-size: 28px 23px;
+  background-size: 22px 21px;
   background-position: center;
   border: none;
   background-color: transparent;
   margin: 0;
   padding: 0;
   cursor: pointer;
+  transition: all .3s ease-in-out;
 }
 
 @media screen and (min-width: 1024px) {
   .burger-menu {
     display: none;
   }
+}
+
+.burger-menu:hover {
+  opacity: 0.6;
 }

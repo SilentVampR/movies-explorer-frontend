@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory, withRouter } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
 import './Header.css';
 import LeftMenu from './LeftMenu/LeftMenu';
 import Logo from './Logo/Logo';
@@ -29,7 +29,10 @@ function Header(props) {
             }
           </div>
           <div className="top-menu__right">
-            <RightMenu loggedIn={props.loggedIn} />
+            <RightMenu
+              loggedIn={props.loggedIn}
+              handlerBurgerClick={props.handlerBurgerClick}
+            />
           </div>
         </div>
       </div>

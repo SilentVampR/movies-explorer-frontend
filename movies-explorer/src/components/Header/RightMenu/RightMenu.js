@@ -6,7 +6,7 @@ function RightMenu(props) {
     return (
       <>
         <Link to="/profile" className="top-menu__link top-menu__link_type_account">Аккаунт</Link>
-        <button className="burger-menu"></button>
+        <button className="burger-menu" onClick={props.handlerBurgerClick}></button>
       </>
     )
   }
