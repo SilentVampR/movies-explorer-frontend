@@ -7,7 +7,7 @@ function Portfolio() {
       <h4 className="portfolio__title">Портфолио</h4>
       <ul className="portfolio__links">
         <li className="portfolio__link-container">
-          <a href="https://silentvampr.github.io/how-to-learn/" className="portfolio__link" target="_blank" rel="noreferrer">
+          <a href="http://silentvampr-ru.1gb.ru/" className="portfolio__link" target="_blank" rel="noreferrer">
             Статичный сайт
           </a>
         </li>
