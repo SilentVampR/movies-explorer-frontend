@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import './Form.css';
 
 function Form({ fieldsList, textsList, onSubmit }) {
-  if (fieldsList, textsList, onSubmit) {
+  if (fieldsList && textsList && onSubmit) {
     const renderInput = (input) => {
       const name = input.name;
       const text = input.text;
