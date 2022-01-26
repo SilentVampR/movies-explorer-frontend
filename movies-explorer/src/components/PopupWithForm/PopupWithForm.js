@@ -1,3 +1,5 @@
+import './PopupWithForm.css';
+
 function PopupWithForm(props) {
   return (
     <div className={`popup popup_type_${props.type}${props.isOpen ? ' popup_opened' : ''}`} onClick={props.onOverlayClick}>

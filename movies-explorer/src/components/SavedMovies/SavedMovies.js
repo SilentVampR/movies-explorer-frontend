@@ -11,7 +11,7 @@ function SavedMovies(props) {
     <>
       <Search />
       <section className="movies">
-        <MoviesCardList films={props.films} page="saved-movies" />
+        <MoviesCardList films={props.films} isLoading={props.isLoading} page="saved-movies" />
         <ShowMore/>
       </section>
     </>

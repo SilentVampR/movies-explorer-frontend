@@ -3,11 +3,11 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { Link } from 'react-router-dom';
 import './Profile.css';
 
-function Profile() {
+function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);
-
   const userName = currentUser.name;
   const userEmail = currentUser.email;
+
   return (
     <section className="profile">
       <h1 className="profile__title">Привет, {userName}!</h1>
@@ -18,7 +18,7 @@ function Profile() {
         <li className="profile__field"><p className="profile__field-text">E-mail</p><p className="profile__field-text profile__field-text_type_email">{userEmail}</p></li>
       </ul>
       <div className="profile__links">
-        <button className="profile__edit-button">Редактировать</button>
+        <button className="profile__edit-button" onClick={props.handleEditProfileClick}>Редактировать</button>
         <Link to="/signout" className="profile__logout-link">Выйти из аккаунта</Link>
       </div>
     </section>

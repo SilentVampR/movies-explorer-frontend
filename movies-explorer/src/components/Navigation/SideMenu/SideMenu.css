@@ -13,9 +13,23 @@
   transition: all .5s ease-in-out;
 }
 
+@media screen and (min-width: 768px) {
+  .side-menu {
+    width: 520px;
+    right: -520px;
+  }
+}
+
 .side-menu_opened {
   visibility: visible;
   transform: translateX(-100vw);
+}
+
+@media screen and (min-width: 768px) {
+  .side-menu_opened {
+    visibility: visible;
+    transform: translateX(-520px);
+  }
 }
 
 .side-menu__close-button {

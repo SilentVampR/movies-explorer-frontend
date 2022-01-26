@@ -10,8 +10,13 @@ function Movies(props) {
     <>
       <Search />
       <section className="movies">
-        <MoviesCardList films={props.films} savedMovies={props.savedMovies} page="movies" />
-        <ShowMore/>
+        <MoviesCardList
+          films={props.films}
+          isLoading={props.isLoading}
+          savedMovies={props.savedMovies}
+          page="movies"
+        />
+        <ShowMore />
       </section>
     </>
   );

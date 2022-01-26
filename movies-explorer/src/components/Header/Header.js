@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, withRouter } from "react-router-dom";
 import './Header.css';
-import LeftMenu from './LeftMenu/LeftMenu';
-import Logo from './Logo/Logo';
-import RightMenu from './RightMenu/RightMenu';
+import LeftMenu from '../Navigation/LeftMenu/LeftMenu';
+import Logo from '../Logo/Logo';
+import RightMenu from '../Navigation/RightMenu/RightMenu';
 
 function Header(props) {
   const history = useHistory();

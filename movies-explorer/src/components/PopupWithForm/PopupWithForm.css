@@ -1,0 +1,232 @@
+.popup {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 999;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0.3s, opacity 0.3s linear;
+  -o-transition: visibility 0.3s, opacity 0.3s linear;
+  transition: visibility 0.3s, opacity 0.3s linear;
+}
+
+.popup_opened {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup__close-button {
+  background-image: url(../../images/cross_22x22.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  right: 0;
+  top: -42px;
+  width: 22px;
+  height: 22px;
+  -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+  transition: transform 0.3s, opacity 0.3s ease-in-out;
+}
+
+.popup__close-button:hover {
+  opacity: 0.6;
+  cursor: pointer;
+  transform: rotate(-45deg);
+}
+
+@media screen and (min-width: 768px) {
+  .popup__close-button {
+    width: 40px;
+    height: 40px;
+    right: -40px;
+    top: -40px;
+  }
+}
+
+.popup__container {
+  position: relative;
+  background-color: white;
+  width: 88.125vw;
+  max-width: 430px;
+  margin: 0 auto;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  padding: 60px 38px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 768px) {
+  .popup__container {
+    padding: 50px 18px;
+  }
+}
+
+.popup__form-container {
+  position: relative;
+  background-color: #202020;
+  width: 88.125vw;
+  max-width: 430px;
+  margin: 0 auto;
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+          box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  padding: 25px 22px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+@media screen and (min-width: 768px) {
+  .popup__form-container {
+    padding: 34px 36px 37px;
+  }
+}
+
+.popup__title {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  color: white;
+  text-align: center;
+  font-size: 18px;
+  line-height: 22px;
+  margin: 0 0 75px;
+  padding: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .popup__title {
+    font-size: 24px;
+    line-height: 29px;
+    margin-bottom: 54px;
+  }
+}
+
+.popup__input-container {
+  margin-bottom: 20px;
+}
+
+.popup__input-container:last-of-type {
+  margin-bottom: 45px;
+}
+
+@media screen and (min-width: 768px) {
+  .popup__input-container:last-of-type {
+    margin-bottom: 48px;
+  }
+}
+
+.popup__input-label {
+  display: block;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  line-height: 12px;
+  color: #8B8B8B;
+  margin-bottom: 10px;
+}
+
+.popup__input {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 16px;
+  color: white;
+  background-color: #2F2F2F;
+  border: none;
+  border-radius: 8px;
+  height: 46px;
+  padding: 15px;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.popup__input:focus {
+  outline: 2px solid #4285F4;
+}
+
+.popup__input_state_not-valid {
+  color: #EE3465;
+}
+
+.popup__text-error {
+  display: none;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  line-height: 12px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0px;
+}
+
+.popup__text-error_state_not-valid {
+  display: block;
+  color: #EE3465;
+  z-index: 1;
+}
+
+.popup__submit-button {
+  width: 100%;
+  min-height: 45px;
+  background-color: #4285F4;
+  border: 0;
+  border-radius: 3px;
+  color: white;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  /*margin-top: 45px;*/
+}
+
+.popup__submit-button:focus {
+  outline: 2px solid white;
+}
+
+.popup__submit-button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .popup__submit-button {
+    min-height: 50px;
+    font-size: 18px;
+    line-height: 22px;
+    /*margin-top: 48px;*/
+  }
+}
+
+.popup__submit-button_disabled {
+  background-color: #2F2F2F;
+  color: white;
+}
+
+.popup__submit-button_disabled:hover {
+  opacity: 1;
+  cursor: not-allowed;
+}
