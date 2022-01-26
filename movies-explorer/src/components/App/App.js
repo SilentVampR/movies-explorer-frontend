@@ -14,7 +14,7 @@ import SignOut from '../SignOut/SignOut';
 import Footer from '../Footer/Footer';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
-import SideMenu from '../SideMenu/SideMenu';
+import SideMenu from '../Navigation/SideMenu/SideMenu';
 import NotFound from '../NotFound/NotFound';
 import Profile from '../Profile/Profile';
 import EditProfilePopup from '../EditProfilePopup/EditProfilePopup';

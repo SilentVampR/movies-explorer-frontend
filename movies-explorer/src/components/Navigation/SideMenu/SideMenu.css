@@ -36,7 +36,7 @@
   position: absolute;
   right: 18px;
   top: 18px;
-  background-image: url(../../images/cross_22x22.svg);
+  background-image: url(../../../images/cross_22x22.svg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -94,7 +94,7 @@
 }
 .side-menu__link_type_account::after {
   content: " ";
-  background-image: url(../../images/account_icon.svg);
+  background-image: url(../../../images/account_icon.svg);
   width: 26px;
   height: 30px;
   background-position: center;
