@@ -50,6 +50,10 @@
   }
 }
 
+.search-form__input:focus {
+  outline: 2px solid #4285F4;
+}
+
 .search-form__button {
   width :34px;
   height: 34px;
@@ -61,7 +65,27 @@
   border: none;
   padding: 0;
   margin: 0 0 0 46px;
+  transition: opacity .3s ease-in-out;
+}
+
+.search-form__button:hover {
+  opacity: 0.8;
   cursor: pointer;
+}
+
+.search-form__button:focus {
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+.search-form__button_disabled {
+  background-color: #2F2F2F;
+  color: white;
+}
+
+.search-form__button_disabled:hover {
+  opacity: 1;
+  cursor: not-allowed;
 }
 
 .short-movies {

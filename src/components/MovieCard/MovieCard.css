@@ -59,6 +59,15 @@
   padding: 0;
   margin: 0 10px 0 0;
   cursor: pointer;
+  transition: opacity .3s ease-in-out;
+}
+
+.movie__button:focus {
+  outline: 2px solid #4285F4;
+}
+
+.movie__button:hover {
+  opacity: 0.8;
 }
 
 .movie__button_type_saved {

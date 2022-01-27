@@ -27,3 +27,7 @@
     max-width: calc(364px * 3 + 24px * 2);
   }
 }
+
+.show-more-movies:focus {
+  outline: 2px solid #4285F4;
+}

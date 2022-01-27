@@ -3,7 +3,6 @@ import './SavedMovies.css';
 
 import Search from '../Search/Search';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import ShowMore from '../ShowMore/ShowMore';
 
 function SavedMovies(props) {
 
@@ -12,7 +11,6 @@ function SavedMovies(props) {
       <Search />
       <section className="movies">
         <MoviesCardList films={props.films} isLoading={props.isLoading} page="saved-movies" />
-        <ShowMore/>
       </section>
     </>
   );
