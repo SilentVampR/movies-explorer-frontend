@@ -1,0 +1,40 @@
+.project-logo {
+  background-color: #073042;
+  background-image: url(../../../images/main_landing_pic.svg);
+  background-size: 248px 248px;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 570px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 768px) {
+  .project-logo {
+    background-size: 320px 320px;
+    padding: 0 19px;
+  }
+}
+
+.project-title {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 31px;
+  line-height: 39px;
+  text-align: center;
+  letter-spacing: -0.04em;
+  color: white;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 520px;
+}
+
+@media screen and (min-width: 768px) {
+  .project-title {
+    font-size: 50px;
+    line-height: 58px;
+    max-width: 730px;
+  }
+}

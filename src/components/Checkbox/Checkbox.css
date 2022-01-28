@@ -1,0 +1,27 @@
+.checkbox-stylized {
+  min-width: 36px;
+  min-height: 20px;
+  background-image: url(../../images/smalltumboff.svg);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  margin: 0 0 0 13px;
+}
+
+.checkbox-stylized_enabled {
+  background-image: url(../../images/smalltumb.svg);
+}
+
+@media screen and (min-width: 1280px) {
+  .checkbox-stylized {
+    margin: 0 14px 0 0;
+  }
+}
+
+.checkbox-stylized:focus {
+  outline: 2px solid #4285F4;
+}

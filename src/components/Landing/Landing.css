@@ -1,0 +1,19 @@
+.section__title {
+  color: white;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: -0.04em;
+  border-bottom: 1px solid white;
+  padding: 0 0 28px;
+  margin: 0 0 60px;
+}
+
+@media screen and (min-width: 768px) {
+  .section__title {
+    font-size: 22px;
+    line-height: 27px;
+    padding: 0 0 23px;
+  }
+}

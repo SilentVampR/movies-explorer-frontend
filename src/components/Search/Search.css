@@ -1,0 +1,121 @@
+.search {
+  padding: 84px 18px 50px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 768px) {
+  .search {
+    padding: 70px 30px 47px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .search {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 70px 70px 47px;
+  }
+}
+
+.search-form {
+  border-bottom: 1px solid #424242;
+  padding: 0 0 9px;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (min-width: 768px) {
+  .search-form {
+    padding: 0 0 13px;
+  }
+}
+
+.search-form__input {
+  background-color: transparent;
+  border: none;
+  height: 34px;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #8B8B8B;
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .search-form__input {
+    font-size: 28px;
+    line-height: 34px;
+  }
+}
+
+.search-form__input:focus {
+  outline: 2px solid #4285F4;
+}
+
+.search-form__button {
+  width :34px;
+  height: 34px;
+  background-image: url(../../images/search.png);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 0 0 46px;
+  transition: opacity .3s ease-in-out;
+}
+
+.search-form__button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.search-form__button:focus {
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+.search-form__button_disabled {
+  background-color: #2F2F2F;
+  color: white;
+}
+
+.search-form__button_disabled:hover {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.short-movies {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 40px 0 0;
+}
+
+@media screen and (min-width: 768px) {
+  .short-movies {
+    margin: 30px 0 0;
+    justify-content: end;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .short-movies {
+    flex-direction: row-reverse;
+    justify-content: start;
+  }
+}
+
+.short-movies__label {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 18px;
+  color: white;
+  padding: 0;
+  margin: 0;
+}

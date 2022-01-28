@@ -1,0 +1,111 @@
+.side-menu {
+  background-color: #202020;
+  width: 100%;
+  position: fixed;
+  right: -100vw;
+  top: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  visibility: hidden;
+  transition: all .5s ease-in-out;
+}
+
+@media screen and (min-width: 768px) {
+  .side-menu {
+    width: 520px;
+    right: -520px;
+  }
+}
+
+.side-menu_opened {
+  visibility: visible;
+  transform: translateX(-100vw);
+}
+
+@media screen and (min-width: 768px) {
+  .side-menu_opened {
+    visibility: visible;
+    transform: translateX(-520px);
+  }
+}
+
+.side-menu__close-button {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  background-image: url(../../../images/cross_22x22.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: transparent;
+  border: none;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  transform: rotate(45deg);
+  transition: all .3s ease-in-out;
+}
+
+.side-menu__close-button:hover {
+  opacity: 0.6;
+  transform: rotate(-45deg);
+}
+
+.side-menu__top-container {
+  margin: 144px auto 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.side-menu__link {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  color: white;
+  text-decoration: none;
+  margin: 0 auto 17px;
+  padding: 0 0 7px;
+  transition: all .3s ease-in-out;
+  border-bottom: 2px solid transparent;
+}
+
+.side-menu__link:hover {
+  color: #8B8B8B;
+}
+
+.side-menu__link_active {
+  border-bottom: 2px solid white;
+}
+
+.side-menu__link_active:hover {
+  border-bottom: 2px solid #8B8B8B;
+}
+
+.side-menu__link_type_account {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 41px;
+}
+.side-menu__link_type_account::after {
+  content: " ";
+  background-image: url(../../../images/account_icon.svg);
+  width: 26px;
+  height: 30px;
+  background-position: center;
+  background-color: #313131;
+  background-repeat: no-repeat;
+  display: block;
+  border-radius: 4px;
+  margin-left: 17px;
+  transition: all .3s ease-in-out;
+}
+
+.side-menu__link_type_account:hover::after {
+  opacity: 0.6;
+}
