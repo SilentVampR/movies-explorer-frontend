@@ -3,7 +3,7 @@ import Logo from '../Logo/Logo';
 import { Link } from "react-router-dom";
 import './Form.css';
 
-function Form({ fieldsList, textsList, onSubmit }) {
+function Form({ fieldsList, textsList, onSubmit, isSending }) {
   if (fieldsList && textsList && onSubmit) {
     const renderInput = (input) => {
       const name = input.name;
@@ -32,6 +32,9 @@ function Form({ fieldsList, textsList, onSubmit }) {
       </div>
     }
 
+
+
+
     return (
       <form className="form" onSubmit={onSubmit}>
         <Logo />
@@ -41,7 +44,7 @@ function Form({ fieldsList, textsList, onSubmit }) {
             {fieldsList.map((i) => renderInput(i))}
           </div>
           <div className="form__footer">
-            <button className="form__submit-button" type="submit">{textsList.button}</button>
+            <button className={`form__submit-button` + (isSending ? ' form__submit-button_disabled' : '')} type="submit" disabled={isSending}>{isSending ? 'Отправляем...' : textsList.button}</button>
             <p className="form__footer-text">{(textsList.footerText) ? textsList.footerText : ''}{textsList.linkTo ? <Link to={textsList.linkTo} className="form__footer-link">{textsList.linkText}</Link> : ''}</p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-.project-logo {
+.project {
   background-color: #073042;
   background-image: url(../../../images/main_landing_pic.svg);
   background-size: 248px 248px;
@@ -12,13 +12,13 @@
 }
 
 @media screen and (min-width: 768px) {
-  .project-logo {
+  .project {
     background-size: 320px 320px;
     padding: 0 19px;
   }
 }
 
-.project-title {
+.project__title {
   font-family: Inter, Arial, Helvetica, sans-serif;
   font-weight: normal;
   font-size: 31px;
@@ -32,7 +32,7 @@
 }
 
 @media screen and (min-width: 768px) {
-  .project-title {
+  .project__title {
     font-size: 50px;
     line-height: 58px;
     max-width: 730px;

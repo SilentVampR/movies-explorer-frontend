@@ -1,8 +1,8 @@
-.header_main-page {
+.header_location_main-page {
   background-color: #073042;
 }
 
-.header__container {
+.header__wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,13 +13,13 @@
 }
 
 @media screen and (min-width: 768px) {
-  .header__container {
+  .header__wrapper {
     padding: 0 30px;
   }
 }
 
 @media screen and (min-width: 1280px) {
-  .header__container {
+  .header__wrapper {
     max-width: 1280px;
     padding: 0 70px;
     margin: 0 auto;

@@ -6,7 +6,7 @@ function MainMenu() {
   return (
     <nav className="main-menu">
         <ul className="main-menu__container">
-          <li>
+          <li className="main-menu__item">
             <AnchorLink
               smooth={true}
               duration={500}
@@ -15,7 +15,7 @@ function MainMenu() {
               О проекте
             </AnchorLink>
           </li>
-          <li>
+          <li className="main-menu__item">
             <AnchorLink
             smooth={true}
             duration={550}
@@ -24,7 +24,7 @@ function MainMenu() {
             Технологии
             </AnchorLink>
             </li>
-          <li>
+          <li className="main-menu__item">
             <AnchorLink
             smooth={true}
             duration={600}

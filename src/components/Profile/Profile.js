@@ -1,6 +1,5 @@
 import React from 'react';
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import { Link } from 'react-router-dom';
 import './Profile.css';
 
 function Profile(props) {
@@ -19,7 +18,7 @@ function Profile(props) {
       </ul>
       <div className="profile__links">
         <button className="profile__edit-button" onClick={props.handleEditProfileClick}>Редактировать</button>
-        <Link to="/signout" className="profile__logout-link">Выйти из аккаунта</Link>
+        <button onClick={props.onSignOut} className="profile__logout-link">Выйти из аккаунта</button>
       </div>
     </section>
   );

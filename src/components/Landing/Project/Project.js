@@ -3,9 +3,9 @@ import './Project.css';
 
 function Project() {
   return (
-    <div className="project-logo">
-      <h1 className="project-title">Учебный проект студента факультета Веб-разработки.</h1>
-    </div>
+    <section className="project">
+      <h1 className="project__title">Учебный проект студента факультета Веб-разработки.</h1>
+    </section>
   );
 }
 

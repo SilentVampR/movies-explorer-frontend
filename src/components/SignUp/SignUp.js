@@ -2,27 +2,25 @@ import React, { useState } from 'react';
 import './SignUp.css';
 import Form from '../Form/Form';
 
-function SignUp() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function SignUp({ isSending, onSignUp }) {
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+    error: ''
+  });
 
-  const handleOnSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`${name} - ${email} - ${password}`); //Вместо этого потом отправляем запрос в API
-
+    const { name, email, password } = data;
+    onSignUp({ name, email, password });
   }
 
-  const handleChangeName = (e) => {
-    setName(e.target.value);
-  }
-
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-  }
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value
+    });
   }
 
   const fieldsList = [
@@ -31,7 +29,7 @@ function SignUp() {
       name: 'name',
       text: 'Имя',
       type: 'text',
-      handle: handleChangeName,
+      handle: handleChange,
       params: [
         {
           name: 'maxLength',
@@ -49,7 +47,7 @@ function SignUp() {
       name: 'email',
       text: 'E-mail',
       type: 'email',
-      handle: handleChangeEmail,
+      handle: handleChange,
       params: [
         {
           name: 'minLength',
@@ -63,7 +61,7 @@ function SignUp() {
       name: 'password',
       text: 'Пароль',
       type: 'password',
-      handle: handleChangePassword,
+      handle: handleChange,
       params: [
         {
           name: 'minLength',
@@ -83,7 +81,7 @@ function SignUp() {
 
   return (
     <section className="signup">
-      <Form fieldsList={fieldsList} textsList={textsList} onSubmit={handleOnSubmit} />
+      <Form fieldsList={fieldsList} isSending={isSending} textsList={textsList} onSubmit={handleSubmit} />
     </section>
   );
 }
