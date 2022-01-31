@@ -73,7 +73,7 @@ function SignUp({ isSending, onSignUp }) {
   ];
   const textsList = {
     title: 'Добро пожаловать!',
-    button: 'Зарегистрироваться',
+    button: isSending ? 'Отправляется...' : 'Зарегистрироваться',
     footerText: 'Уже зарегистрированы?',
     linkTo: '/signin',
     linkText: 'Войти'
@@ -81,7 +81,12 @@ function SignUp({ isSending, onSignUp }) {
 
   return (
     <section className="signup">
-      <Form fieldsList={fieldsList} isSending={isSending} textsList={textsList} onSubmit={handleSubmit} />
+      <Form
+        fieldsList={fieldsList}
+        isDisabled={isSending}
+        textsList={textsList}
+        onSubmit={handleSubmit}
+      />
     </section>
   );
 }

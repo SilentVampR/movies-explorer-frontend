@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SignIn.css';
 import Form from '../Form/Form';
 
 
 function SignIn({ isSending, onSignIn }) {
   const [data, setData] = useState({
-    email: '',
-    password: '',
-  })
+    email: "",
+    password: ""
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +36,7 @@ function SignIn({ isSending, onSignIn }) {
           parametr: 2,
         },
       ],
-      required: true,
+      required: true
     },
     {
       id: 2,
@@ -50,19 +50,24 @@ function SignIn({ isSending, onSignIn }) {
           parametr: 2,
         },
       ],
-      required: true,
+      required: true
     }
   ];
   const textsList = {
     title: 'Рады видеть!',
-    button: 'Войти',
+    button: isSending ? 'Обработка...' : 'Войти',
     footerText: 'Еще не зарегистрированы?',
     linkTo: '/signup',
     linkText: 'Регистрация'
   }
   return (
     <section className="signin">
-      <Form fieldsList={fieldsList} isSending={isSending} textsList={textsList} onSubmit={handleSubmit} />
+      <Form
+        fieldsList={fieldsList}
+        isDisabled={isSending}
+        textsList={textsList}
+        onSubmit={handleSubmit}
+      />
     </section>
   );
 }

@@ -3,38 +3,34 @@ import Logo from '../Logo/Logo';
 import { Link } from "react-router-dom";
 import './Form.css';
 
-function Form({ fieldsList, textsList, onSubmit, isSending }) {
-  if (fieldsList && textsList && onSubmit) {
-    const renderInput = (input) => {
-      const name = input.name;
-      const text = input.text;
-      const handle = input.handle;
-      const formParams = {
-        type: input.type,
-        name: name,
-        id: name,
-        className: 'form__input',
-        placeholder: text,
-      };
-      if (input.params) {
-        input.params.map((i) => formParams[i.name] = i.parametr);
-      }
-      if (handle) {
-        formParams.onChange = handle;
-      }
-      if (input.required) {
-        formParams.required = true;
-      }
-      return <div className="form__input-container" key={input.id}>
-        <label className="form__input-label" htmlFor={name}>{text}</label>
-        <input {...formParams} />
-        <span className="form__text-error"></span>
-      </div>
+function Form({ fieldsList, textsList, onSubmit, isDisabled }) {
+  const renderInput = (input) => {
+    const name = input.name;
+    const text = input.text;
+    const handle = input.handle;
+    const formParams = {
+      type: input.type,
+      name: name,
+      id: name,
+      className: 'form__input',
+      placeholder: text,
+    };
+    if (input.params) {
+      input.params.map((i) => formParams[i.name] = i.parametr);
     }
-
-
-
-
+    if (handle) {
+      formParams.onChange = handle;
+    }
+    if (input.required) {
+      formParams.required = true;
+    }
+    return <div className="form__input-container" key={input.id}>
+      <label className="form__input-label" htmlFor={name}>{text}</label>
+      <input {...formParams} />
+      <span className="form__text-error"></span>
+    </div>
+  }
+  if (fieldsList && textsList && onSubmit) {
     return (
       <form className="form" onSubmit={onSubmit}>
         <Logo />
@@ -44,7 +40,13 @@ function Form({ fieldsList, textsList, onSubmit, isSending }) {
             {fieldsList.map((i) => renderInput(i))}
           </div>
           <div className="form__footer">
-            <button className={`form__submit-button` + (isSending ? ' form__submit-button_disabled' : '')} type="submit" disabled={isSending}>{isSending ? 'Отправляем...' : textsList.button}</button>
+            <button
+              className={`form__submit-button${isDisabled ? ' form__submit-button_disabled' : ''}`}
+              type="submit"
+              disabled={isDisabled}
+            >
+              {textsList.button}
+            </button>
             <p className="form__footer-text">{(textsList.footerText) ? textsList.footerText : ''}{textsList.linkTo ? <Link to={textsList.linkTo} className="form__footer-link">{textsList.linkText}</Link> : ''}</p>
           </div>
         </div>

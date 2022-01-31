@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import ProtectedComponent from '../ProtectedComponent/ProtectedComponent';
 import './App.css';
 import * as auth from '../../utils/auth';
 
@@ -28,8 +29,8 @@ function App() {
   /*STATES*/
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [currentUser, setCurentUser] = useState({ name: '', email: '' });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurentUser] = useState({});
   const [films, setFilms] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [isSideMenuOpened, setIsSideMenuOpened] = useState(false);
@@ -55,14 +56,13 @@ function App() {
         return console.log(`Ошибка обработки запроса (проверка авторизации). Статус: ${status}`);
       }
     }
+    if (type === 'signout') {
+      return console.log(`Ошибка обработки запроса (попытка выхода из приложения). Статус: ${status}`);
+    }
     return console.log(`Ошибка обработки запроса. Статус: ${status}`);
   }
 
   useEffect(() => {
-    authCheck();
-  }, [])
-
-  const authCheck = () => {
     setIsAuthChecking(true);
     myApi.getUserInfo()
       .then(res => {
@@ -77,83 +77,12 @@ function App() {
         handleResponseError('authcheck', err.status);
       })
       .finally(() => setIsAuthChecking(false));
-  }
-
-  useEffect(() => {
-    setIsLoading(true);
-    setSavedMovies( //Временное решение с сохраненными фильмами
-      savedMoviesList
-    )
-    setIsLoading(false);
   }, []);
-
-  const handlerBurgerClick = () => {
-    setIsSideMenuOpened(true);
-  }
-
-  const handleMenuClose = () => {
-    setIsSideMenuOpened(false);
-  }
-
-  useEffect(() => {
-    setIsLoading(true);
-    moviesApi.getInitialMovies()
-      .then(res => setFilms(res))
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    const closeByEscape = (evt) => {
-      if (evt.key === 'Escape') {
-        closeAllPopups();
-      }
-    }
-
-    document.addEventListener('keydown', closeByEscape)
-
-    return () => document.removeEventListener('keydown', closeByEscape)
-  }, []);
-
-  /* PROFILE */
-
-  const handleEditProfileClick = () => {
-    setIsEditProfilePopupOpen(true);
-
-  }
-
-  const handleUpdateUser = (data) => {
-    setIsFormSending(true);
-    myApi.editUserInfo(data)
-      .then(res => setCurentUser(res.data))
-      .then(() => closeAllPopups())
-      .catch(err => console.log(err))
-      .finally(() => setIsFormSending(false));
-  }
-
-  /* END PROFILE */
-
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      closeAllPopups();
-    }
-  }
-
-  /* ALL POPUPS */
-
-  const closeAllPopups = () => {
-    setIsEditProfilePopupOpen(false);
-  }
-
-  /* END ALL POPUPS */
 
   /* РЕГИСТРАЦИЯ */
 
   const handleSignUp = ({ name, email, password }) => {
+    setIsFormSending(true);
     auth.signUp({ name, email, password })
       .then(() => {
         history.push('./signin');
@@ -171,28 +100,107 @@ function App() {
           message: 'Что-то пошло не так! Попробуйте ещё раз.'
         });*/
       })
+      .finally(() => setIsFormSending(false));
   }
 
   /* ВХОД */
   const handleSignIn = ({ email, password }) => {
-    setIsFormSending(true)
+    setIsFormSending(true);
     auth.signIn({ email, password })
       .then((res) => {
-        setCurentUser({ name: res.name, email: res.email });
         setIsLoggedIn(true);
-        setIsFormSending(false);
+        setCurentUser({ name: res.name, email: res.email });
+        history.push('/movies');
       })
       .catch(err => {
         handleResponseError('signin', err);
       })
-      .finally(() => history.push('/'));
+      .finally(() => setIsFormSending(false));
   }
 
   /* ВЫХОД */
   const handleSignOut = () => {
-    auth.signOut();
-    history.push('/');
-    setIsLoggedIn(false);
+    auth.signOut()
+      .then(() => setIsLoggedIn(false))
+      .catch(err => handleResponseError('signout', err))
+      .finally(() => {
+        history.push('/');
+      })
+  }
+
+  /* ЗАГРУЗКА СОХРАНЕННЫХ ФИЛЬМОВ (ТОЛЬКО ДЛЯ АВТОРИЗОВАННЫХ) */
+  useEffect(() => {
+    if (isLoggedIn) {
+      setIsLoading(true);
+      setSavedMovies( //Временное решение с сохраненными фильмами
+        savedMoviesList
+      )
+      setIsLoading(false);
+    }
+  }, [isLoggedIn]);
+
+  /* ОБРАБОТЧИКИ КНОПОК МЕНЮ */
+  const handlerBurgerClick = () => {
+    setIsSideMenuOpened(true);
+  }
+
+  const handleMenuClose = () => {
+    setIsSideMenuOpened(false);
+  }
+
+  /* ЗАГРУЗКА КАРТОЧЕК С СЕРВЕРА BEATFILMS */
+  useEffect(() => {
+    if (isLoggedIn) {
+      setIsLoading(true);
+      moviesApi.getInitialMovies()
+        .then(res => setFilms(res))
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [isLoggedIn]);
+
+  /* PROFILE */
+
+  const handleEditProfileClick = () => {
+    setIsEditProfilePopupOpen(true);
+  }
+
+  const handleUpdateUser = (data) => {
+    setIsFormSending(true);
+    myApi.editUserInfo(data)
+      .then((res) => {
+        setCurentUser(res.data);
+        closeAllPopups();
+      })
+      .catch(err => console.log(err))
+      .finally(() => setIsFormSending(false));
+  }
+
+  /* END PROFILE */
+
+  /* ОБРАБОТЧИКИ ДЛЯ ЗАКРЫТИЯ ПОПАПОВ */
+  useEffect(() => {
+    const closeByEscape = (evt) => {
+      if (evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    document.addEventListener('keydown', closeByEscape)
+    return () => document.removeEventListener('keydown', closeByEscape)
+  }, []);
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      closeAllPopups();
+    }
+  }
+
+  /* ALL POPUPS */
+
+  const closeAllPopups = () => {
+    setIsEditProfilePopupOpen(false);
   }
 
   return (
@@ -204,21 +212,18 @@ function App() {
           <Switch>
             <Route
               path="/(|movies|saved-movies|profile)"
-              component={() => (
-                <Header
-                  isLoggedIn={isLoggedIn}
-                  handlerBurgerClick={handlerBurgerClick}
-                />
-              )}
-            />
+            >
+              <Header
+                isLoggedIn={isLoggedIn}
+                handlerBurgerClick={handlerBurgerClick}
+              />
+            </Route>
           </Switch>
           <main className="main">
             <Switch>
               <Route
                 component={() => (
-                  <Landing
-                    isLoggedIn={isLoggedIn}
-                  />
+                  <Landing />
                 )}
                 path="/"
                 exact
@@ -253,24 +258,24 @@ function App() {
               />
               <Route
                 path="/signin"
-                component={() => (
-                  <SignIn
-                    isLoggedIn={isLoggedIn}
-                    onSignIn={handleSignIn}
-                    isSending={isFormSending}
-                  />
-                )}
-              />
+                exact
+              >
+                <SignIn
+                  isLoggedIn={isLoggedIn}
+                  onSignIn={handleSignIn}
+                  isSending={isFormSending}
+                />
+              </Route>
               <Route
                 path="/signup"
-                component={() => (
-                  <SignUp
-                    isLoggedIn={isLoggedIn}
-                    onSignUp={handleSignUp}
-                    isSending={isFormSending}
-                  />
-                )}
-              />
+                exact
+              >
+                <SignUp
+                  isLoggedIn={isLoggedIn}
+                  onSignUp={handleSignUp}
+                  isSending={isFormSending}
+                />
+              </Route>
               <Route
                 path="*"
                 component={NotFound}
@@ -282,21 +287,16 @@ function App() {
               path="/(|movies|saved-movies)"
               component={Footer}
             />
-            <Route
-              path="/profile"
-              exact
-              component={() => (
-                <EditProfilePopup
-                  isLoggedIn={isLoggedIn}
-                  isOpen={isEditProfilePopupOpen}
-                  onClose={closeAllPopups}
-                  onOverlayClick={handleOverlayClick}
-                  onUpdateUser={handleUpdateUser}
-                  isSending={isFormSending}
-                />
-              )}
-            />
           </Switch>
+          <ProtectedComponent
+            component={EditProfilePopup}
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onOverlayClick={handleOverlayClick}
+            onUpdateUser={handleUpdateUser}
+            isSending={isFormSending}
+            isLoggedIn={isLoggedIn}
+          />
           <SideMenu
             isSideMenuOpened={isSideMenuOpened}
             handleMenuClose={handleMenuClose}

@@ -1,6 +1,5 @@
 export const beatFilmApiURL = "https://api.nomoreparties.co";
-//export const myApiURL = "https://silent-server.nomoredomains.rocks";
-export const myApiURL = "http://localhost:3002";
+export const myApiURL = "https://silent-server.nomoredomains.rocks";
 
 export const savedMoviesList = [
   {
