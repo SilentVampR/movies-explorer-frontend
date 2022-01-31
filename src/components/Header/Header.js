@@ -15,8 +15,8 @@ function Header(props) {
 
   useEffect(() => {
     setHeaderStyle((uri === '/') ? 'header header_location_main-page' : 'header');
-    setShowLeftMenu(props.loggedIn && uri !== '/signin' && uri !== '/signup' ? true : false);
-  }, [uri, props.loggedIn]);
+    setShowLeftMenu(props.isLoggedIn && uri !== '/signin' && uri !== '/signup' ? true : false);
+  }, [uri, props.isLoggedIn]);
 
   return (
     <header className={headerStyle}>
@@ -30,7 +30,7 @@ function Header(props) {
           </div>
           <div className="top-menu__right">
             <RightMenu
-              loggedIn={props.loggedIn}
+              isLoggedIn={props.isLoggedIn}
               handlerBurgerClick={props.handlerBurgerClick}
             />
           </div>

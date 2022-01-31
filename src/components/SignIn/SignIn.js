@@ -2,22 +2,25 @@ import React, { useState } from 'react';
 import './SignIn.css';
 import Form from '../Form/Form';
 
-function SignIn() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleOnSubmit = (e) => {
+function SignIn({ isSending, onSignIn }) {
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+  })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value
+    })
+  }
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`${email} - ${password}`); //Вместо этого потом отправляем запрос в API
-
-  }
-
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-  }
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
+    const { email, password } = data;
+    onSignIn({ email, password });
   }
 
   const fieldsList = [
@@ -26,7 +29,7 @@ function SignIn() {
       name: 'email',
       text: 'E-mail',
       type: 'email',
-      handle: handleChangeEmail,
+      handle: handleChange,
       params: [
         {
           name: 'minLength',
@@ -40,7 +43,7 @@ function SignIn() {
       name: 'password',
       text: 'Пароль',
       type: 'password',
-      handle: handleChangePassword,
+      handle: handleChange,
       params: [
         {
           name: 'minLength',
@@ -59,7 +62,7 @@ function SignIn() {
   }
   return (
     <section className="signin">
-      <Form fieldsList={fieldsList} textsList={textsList} onSubmit={handleOnSubmit} />
+      <Form fieldsList={fieldsList} isSending={isSending} textsList={textsList} onSubmit={handleSubmit} />
     </section>
   );
 }

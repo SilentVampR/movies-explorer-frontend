@@ -7,7 +7,7 @@ function MoviesCardList(props) {
   let step = 6;
   return (
     <>
-      <Preloader isLoading={props.isLoading} />
+    {props.isLoading ? <Preloader /> :
       <div className="movies__container">
         {props.films.map((item) => (
           (item.id <= step) &&
@@ -21,6 +21,7 @@ function MoviesCardList(props) {
             savedMovies={props.savedMovies}
           />))}
       </div>
+    }
     </>
   );
 }

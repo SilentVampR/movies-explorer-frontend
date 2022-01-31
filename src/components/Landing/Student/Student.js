@@ -5,7 +5,7 @@ import Portfolio from './Portfolio/Portfolio';
 
 function Student() {
   return (
-    <section className="student" id="student">
+    <section className="section student" id="student">
       <h2 className="section__title">Студент</h2>
       <div className="student__container">
         <img src={avatar} alt="Фото Евгений Корсунов" className="student__photo" />

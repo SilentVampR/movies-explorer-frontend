@@ -1,4 +1,4 @@
-import { beatFilmApiURL, myApiURL } from './constants';
+import { beatFilmApiURL } from './constants';
 
 class Api {
   constructor({apiURL, headers}){
@@ -24,7 +24,7 @@ class Api {
 
   getSaved
 }
-const api = new Api({ apiURL:beatFilmApiURL, headers: {
+const moviesApi = new Api({ apiURL:beatFilmApiURL, headers: {
   'Content-Type': 'application/json; charset=UTF-8'
 } });
-export default api;
+export default moviesApi;

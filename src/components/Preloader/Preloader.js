@@ -3,13 +3,11 @@ import './Preloader.css'
 
 const Preloader = (props) => {
   return (
-    (props.isLoading) && (
-      <div className="preloader">
-        <div className="preloader__container">
-          <span className="preloader__round"></span>
-        </div>
+    <div className={`preloader` + (props.fullscreen ? ' preloader_type_fullscreen' : '')}>
+      <div className="preloader__container">
+        <span className="preloader__round"></span>
       </div>
-    )
+    </div>
   )
 };
 

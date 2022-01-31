@@ -149,10 +149,13 @@
   padding: 0;
   text-decoration: none;
   transition: color .3s ease-in-out;
+  background-color: transparent;
+  border: 0;
 }
 
 .profile__logout-link:hover {
   color: #A6193E;
+  cursor: pointer;
 }
 
 .profile__edit-message-text {
