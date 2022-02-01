@@ -8,7 +8,12 @@ import ShowMore from '../ShowMore/ShowMore';
 function Movies(props) {
   return (
     <>
-      <Search />
+      <Search
+        isSending={props.isSending}
+        onSearch={props.onSearch}
+        shortMovies={props.shortMovies}
+        setShortMovies={props.setShortMovies}
+       />
       <section className="movies">
         <MoviesCardList
           films={props.films}

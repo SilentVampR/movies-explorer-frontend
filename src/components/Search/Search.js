@@ -1,54 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import Checkbox from '../Checkbox/Checkbox';
 import './Search.css';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
-function Search() {
+function Search({ isSending, onSearch, shortMovies, setShortMovies }) {
+  const { values, errors, isValid, handleOnChange, resetForm } = useFormWithValidation();
 
-  const [movieName, setMovieName] = useState('');
-  const [isShortMovieSelected, setIsShortMovieSelected] = useState(false);
+  const localSearchShort = localStorage.getItem('searchShort');
+  const localSearchWord = localStorage.getItem('searchWord');
+  useEffect(() => {
+    console.log('Check short - (' + localSearchShort + ')')
+    if(localSearchShort) {
+      setShortMovies(localSearchShort);
+    }
+  }, [localSearchShort])
 
-  const handleChangeMovieName = (e) => {
-    setMovieName(e.target.value);
-  }
+  useEffect(() => {
+    console.log('Change short - (' + shortMovies + ')')
+    resetForm({
+      ...values,
+      shortMovies: shortMovies
+    }, errors, isValid);
+  }, [shortMovies, resetForm]);
 
-  const handleChangeCheckBox = () => {
-    //React ругается на его отсутсвие, поэтому пока он здесь
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    onSearch(values);
   }
 
   const handleCheckBox = (e) => {
     e.target.classList.toggle('checkbox-stylized_enabled');
-    setIsShortMovieSelected(!isShortMovieSelected);
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(movieName + ' - ' + isShortMovieSelected);
+    setShortMovies(!shortMovies);
   }
 
   return (
     <section className="search">
-      <form className="search-form" onSubmit={handleSubmit}>
+      <form className="search-form" onSubmit={handleOnSubmit}>
         <input
           className="search-form__input"
           name="movieName"
-          onChange={handleChangeMovieName}
+          onChange={handleOnChange}
           required
           placeholder="Фильм"
           minLength="2"
+          pattern='[a-zA-Zа-яА-Я0-9 -]{1,}'
+          value={(localSearchWord!== null) ? localSearchWord : ""}
         />
         <input
           className="search-form__checkbox"
           name="shortMovies"
-          onChange={handleChangeCheckBox}
-          checked={isShortMovieSelected}
+          onChange={handleOnChange}
+          checked={shortMovies}
           type="checkbox"
           hidden
         />
-        <button className="search-form__button"></button>
+        <button className={`search-form__button${(isSending || !isValid) ? ' search-form__button_disabled' : ''}`} disabled={isSending || !isValid}></button>
+        <span className={`search-form__error${(errors.movieName && !isValid) ? ' search-form__error_state_not-valid' : ''}`}>{errors.movieName ? errors.movieName : ''}</span>
       </form>
       <div className="short-movies">
         <p className="short-movies__label">Короткометражки</p>
-        <Checkbox handleCheckBox={handleCheckBox} />
+        <Checkbox handleCheckBox={handleCheckBox} shortMovies={shortMovies} />
       </div>
     </section>
   );

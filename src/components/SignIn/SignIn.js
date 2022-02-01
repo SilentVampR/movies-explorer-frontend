@@ -1,26 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './SignIn.css';
 import Form from '../Form/Form';
-
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
 function SignIn({ isSending, onSignIn }) {
-  const [data, setData] = useState({
-    email: "",
-    password: ""
-  });
+  const { values, errors, isValid, handleOnChange } = useFormWithValidation();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value
-    })
-  }
-
-  const handleSubmit = (e) => {
+  const handleOnSubmit = (e) => {
     e.preventDefault();
-    const { email, password } = data;
-    onSignIn({ email, password });
+    onSignIn(values);
   }
 
   const fieldsList = [
@@ -29,7 +17,7 @@ function SignIn({ isSending, onSignIn }) {
       name: 'email',
       text: 'E-mail',
       type: 'email',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'minLength',
@@ -43,7 +31,7 @@ function SignIn({ isSending, onSignIn }) {
       name: 'password',
       text: 'Пароль',
       type: 'password',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'minLength',
@@ -64,9 +52,11 @@ function SignIn({ isSending, onSignIn }) {
     <section className="signin">
       <Form
         fieldsList={fieldsList}
-        isDisabled={isSending}
+        isDisabled={isSending || !isValid}
         textsList={textsList}
-        onSubmit={handleSubmit}
+        onSubmit={handleOnSubmit}
+        isValid={isValid}
+        errors={errors}
       />
     </section>
   );

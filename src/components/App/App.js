@@ -36,6 +36,7 @@ function App() {
   const [isSideMenuOpened, setIsSideMenuOpened] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isFormSending, setIsFormSending] = useState(false);
+  const [isShortMovieSelected, setIsShortMovieSelected] = useState(false);
 
   const handleResponseError = (type, status) => {
     if (type === 'signin') {
@@ -161,6 +162,15 @@ function App() {
     }
   }, [isLoggedIn]);
 
+  /* ПОИСК */
+
+  const onSearch = (data) => {
+    //localStorage.setItem('searchShort', data.shortMovies);
+    console.log(data);
+  }
+
+
+
   /* PROFILE */
 
   const handleEditProfileClick = () => {
@@ -237,6 +247,10 @@ function App() {
                 isLoading={isLoading}
                 isAuthChecking={isAuthChecking}
                 isLoggedIn={isLoggedIn}
+                isSending={isFormSending}
+                onSearch={onSearch}
+                shortMovies={isShortMovieSelected}
+                setShortMovies={setIsShortMovieSelected}
               />
               <ProtectedRoute
                 path="/saved-movies"
@@ -246,6 +260,10 @@ function App() {
                 isLoading={isLoading}
                 isAuthChecking={isAuthChecking}
                 isLoggedIn={isLoggedIn}
+                isSending={isFormSending}
+                onSearch={onSearch}
+                shortMovies={isShortMovieSelected}
+                setShortMovies={setIsShortMovieSelected}
               />
               <ProtectedRoute
                 path="/profile"

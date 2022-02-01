@@ -1,26 +1,14 @@
 import React, { useState } from 'react';
 import './SignUp.css';
 import Form from '../Form/Form';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
 function SignUp({ isSending, onSignUp }) {
-  const [data, setData] = useState({
-    email: '',
-    password: '',
-    error: ''
-  });
+  const { values, errors, isValid, handleOnChange } = useFormWithValidation();
 
-  const handleSubmit = (e) => {
+  const handleOnSubmit = (e) => {
     e.preventDefault();
-    const { name, email, password } = data;
-    onSignUp({ name, email, password });
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value
-    });
+    onSignUp(values);
   }
 
   const fieldsList = [
@@ -29,7 +17,7 @@ function SignUp({ isSending, onSignUp }) {
       name: 'name',
       text: 'Имя',
       type: 'text',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'maxLength',
@@ -39,6 +27,10 @@ function SignUp({ isSending, onSignUp }) {
           name: 'minLength',
           parametr: 2,
         },
+        {
+          name: 'pattern',
+          parametr: '[a-zA-Zа-яА-Я -]{1,}'
+        }
       ],
       required: true,
     },
@@ -47,7 +39,7 @@ function SignUp({ isSending, onSignUp }) {
       name: 'email',
       text: 'E-mail',
       type: 'email',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'minLength',
@@ -61,7 +53,7 @@ function SignUp({ isSending, onSignUp }) {
       name: 'password',
       text: 'Пароль',
       type: 'password',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'minLength',
@@ -83,9 +75,11 @@ function SignUp({ isSending, onSignUp }) {
     <section className="signup">
       <Form
         fieldsList={fieldsList}
-        isDisabled={isSending}
+        isDisabled={isSending || !isValid}
         textsList={textsList}
-        onSubmit={handleSubmit}
+        onSubmit={handleOnSubmit}
+        isValid={isValid}
+        errors={errors}
       />
     </section>
   );

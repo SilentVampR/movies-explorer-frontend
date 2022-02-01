@@ -3,7 +3,7 @@ import Logo from '../Logo/Logo';
 import { Link } from "react-router-dom";
 import './Form.css';
 
-function Form({ fieldsList, textsList, onSubmit, isDisabled }) {
+function Form({ fieldsList, textsList, onSubmit, isDisabled, isValid, errors }) {
   const renderInput = (input) => {
     const name = input.name;
     const text = input.text;
@@ -12,7 +12,7 @@ function Form({ fieldsList, textsList, onSubmit, isDisabled }) {
       type: input.type,
       name: name,
       id: name,
-      className: 'form__input',
+      className: (errors[name] && !isValid) ? 'form__input form__input_state_not-valid' : 'form__input',
       placeholder: text,
     };
     if (input.params) {
@@ -27,7 +27,7 @@ function Form({ fieldsList, textsList, onSubmit, isDisabled }) {
     return <div className="form__input-container" key={input.id}>
       <label className="form__input-label" htmlFor={name}>{text}</label>
       <input {...formParams} />
-      <span className="form__text-error"></span>
+      <span className={`form__text-error${(errors[name] && !isValid) ? ' form__text-error_state_not-valid' : ''}`}>{errors[name] || ""}</span>
     </div>
   }
   if (fieldsList && textsList && onSubmit) {

@@ -3,8 +3,8 @@ import './PopupWithForm.css';
 function PopupWithForm(props) {
   return (
     <div className={`popup popup_type_${props.type}${props.isOpen ? ' popup_opened' : ''}`} onClick={props.onOverlayClick}>
-      <form className="popup__form-container" name={props.type} onSubmit={props.onSubmit}>
-        <h2 className="popup__title">{props.title}</h2>
+      <form className="form popup__form" name={props.type} onSubmit={props.onSubmit}>
+        <h2 className="form__title popup__title">{props.title}</h2>
         <div>
           {props.children}
         </div>

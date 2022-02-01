@@ -1,34 +1,23 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import PopupWithForm from "../PopupWithForm/PopupWithForm";
+import { useFormWithValidation } from "../../hooks/useFormWithValidation";
 
 function EditProfilePopup(props) {
 
   const currentUser = useContext(CurrentUserContext);
 
-  const [name, setName] = useState('');
-
-  const [email, setEmail] = useState('');
+  const { values, errors, isValid, handleOnChange, resetForm } = useFormWithValidation();
 
   useEffect(() => {
-    setName(currentUser.name);
-    setEmail(currentUser.email);
-  }, [currentUser, props.isOpen]);
-
-  const handleOnChangeName = (e) => {
-    setName(e.target.value);
-  }
-
-  const handleOnChangeEmail = (e) => {
-    setEmail(e.target.value);
-  }
+    if (currentUser) {
+      resetForm(currentUser, {}, true);
+    }
+  }, [currentUser, resetForm]);
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    props.onUpdateUser({
-      name,
-      email,
-    });
+    props.onUpdateUser(values);
   }
 
   return (
@@ -40,37 +29,38 @@ function EditProfilePopup(props) {
       onClose={props.onClose}
       onOverlayClick={props.onOverlayClick}
       onSubmit={handleOnSubmit}
-      isDisabled={props.isSending}
+      isDisabled={!isValid || props.isSending}
     >
-      <div className="popup__input-container">
-        <label htmlFor="profileUserName" className="popup__input-label">Имя</label>
+      <div className="form__input-container">
+        <label htmlFor="name" className="form__input-label">Имя</label>
         <input
           type="text"
-          id="profileUserName"
-          name="profileUserName"
-          className="popup__input"
+          id="name"
+          name="name"
+          className={`form__input${(errors.name && !isValid) ? ' form__input_state_not-valid' : ''}`}
           placeholder="Имя"
           required
           minLength="2"
           maxLength="30"
-          value={name}
-          onChange={handleOnChangeName}
+          pattern='[a-zA-Zа-яА-Я -]{1,}'
+          value={values.name || ""}
+          onChange={handleOnChange}
         />
-        <span className="popup__text-error"></span>
+        <span className={`form__text-error${(errors.name && !isValid) ? ' form__text-error_state_not-valid' : ''}`}>{errors.name || ""}</span>
       </div>
-      <div className="popup__input-container">
-        <label htmlFor="profileUserEmail" className="popup__input-label">E-mail</label>
+      <div className="form__input-container">
+        <label htmlFor="email" className="form__input-label">E-mail</label>
         <input
           type="email"
-          id="profileUserEmail"
-          name="profileUserEmail"
-          className="popup__input"
+          id="email"
+          name="email"
+          className={`form__input${(errors.email && !isValid) ? ' form__input_state_not-valid' : ''}`}
           placeholder="E-mail"
           required
-          value={email}
-          onChange={handleOnChangeEmail}
+          value={values.email || ""}
+          onChange={handleOnChange}
         />
-        <span className="popup__text-error"></span>
+        <span className={`form__text-error${(errors.email && !isValid) ? ' form__text-error_state_not-valid' : ''}`}>{errors.email || ""}</span>
       </div>
     </PopupWithForm>
   );
