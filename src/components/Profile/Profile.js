@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import './Profile.css';
 
 function Profile(props) {
-  const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   const userName = currentUser.name;
   const userEmail = currentUser.email;
 

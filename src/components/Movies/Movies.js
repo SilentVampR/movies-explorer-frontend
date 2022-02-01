@@ -5,23 +5,43 @@ import Search from '../Search/Search';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import ShowMore from '../ShowMore/ShowMore';
 
-function Movies(props) {
+function Movies({
+  isSending,
+  onSearch,
+  shortMovies,
+  setShortMovies,
+  localData,
+  movies,
+  isLoading,
+  savedMovies,
+  step,
+  handleShowMore,
+  setIsSending,
+}) {
   return (
     <>
       <Search
-        isSending={props.isSending}
-        onSearch={props.onSearch}
-        shortMovies={props.shortMovies}
-        setShortMovies={props.setShortMovies}
-       />
+        isSending={isSending}
+        onSearch={onSearch}
+        shortMovies={shortMovies}
+        setShortMovies={setShortMovies}
+        localData={localData}
+      />
       <section className="movies">
         <MoviesCardList
-          films={props.films}
-          isLoading={props.isLoading}
-          savedMovies={props.savedMovies}
+          movies={movies}
+          isLoading={isLoading}
+          savedMovies={savedMovies}
           page="movies"
+          shortMovies={shortMovies}
+          localData={localData}
+          step={step}
         />
-        <ShowMore />
+        <ShowMore
+          handleShowMore={handleShowMore}
+          step={step}
+          movies={movies}
+        />
       </section>
     </>
   );

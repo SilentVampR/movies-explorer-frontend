@@ -26,18 +26,24 @@ import Preloader from '../Preloader/Preloader';
 function App() {
   const history = useHistory();
 
-  /*STATES*/
-  const [isLoading, setIsLoading] = useState(false);
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurentUser] = useState({});
-  const [films, setFilms] = useState([]);
-  const [savedMovies, setSavedMovies] = useState([]);
-  const [isSideMenuOpened, setIsSideMenuOpened] = useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isFormSending, setIsFormSending] = useState(false);
-  const [isShortMovieSelected, setIsShortMovieSelected] = useState(false);
+  /* STATES */
+  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки данных
+  const [isAuthChecking, setIsAuthChecking] = useState(true); // Состояние проверки аутентификации. По умолчанию включено
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Состояние авторизации пользователя
+  const [currentUser, setCurentUser] = useState({}); // Данные пользователя
+  const [beatMovies, setBeatMovies] = useState([]); // Загруженные фильмы с сервера
+  const [savedMovies, setSavedMovies] = useState([]); // Сохраненные фильмы пользователя в нашей базе данных
+  const [isSideMenuOpened, setIsSideMenuOpened] = useState(false); // Состояние бокового меню (по умолчанию закрыто)
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false); // Состояние попапа формы редактирования профиля
+  const [isFormSending, setIsFormSending] = useState(false); // Состояние отправки данных на сервер
+  const [isShortMovieSelected, setIsShortMovieSelected] = useState(false); // Состояние чекбокса сохраненных фильмов
+  const [localData, setLocalData] = useState({});
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [filteredSavedMovies, setFilteredSavedMovies] = useState([]);
+  const [cardsOnPage, setCardsOnPage] = useState(3);
+  const [step, setStep] = useState(cardsOnPage);
 
+  /* Общий обработчик ошибок */
   const handleResponseError = (type, status) => {
     if (type === 'signin') {
       if (status === 400) {
@@ -63,13 +69,16 @@ function App() {
     return console.log(`Ошибка обработки запроса. Статус: ${status}`);
   }
 
+  /* ПРОВЕРКА АУТЕНТИФИКАЦИИ */
+
   useEffect(() => {
     setIsAuthChecking(true);
     myApi.getUserInfo()
       .then(res => {
         setCurentUser({
           name: res.data.name,
-          email: res.data.email
+          email: res.data.email,
+          id: res.data._id // ID пользователя пока сохраняем, например для идентификации данных в локальном хранилище
         });
         setIsLoggedIn(true);
       })
@@ -78,6 +87,27 @@ function App() {
         handleResponseError('authcheck', err.status);
       })
       .finally(() => setIsAuthChecking(false));
+  }, []);
+
+  /* ДОСТАЕМ ДАННЫЕ ИЗ ЛОКАЛЬНОГО ХРАНИЛИЩА */
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      setLocalData(JSON.parse(localStorage.getItem('searchMovies')));
+    }
+  }, [isLoggedIn]);
+
+  /* ПРОВЕРКА СООТВЕТСВИЯ ЛОКАЛЬНОГО ХРАНИЛИЩА ТЕКУЩЕМУ ПОЛЬЗОВАТЕЛЮ */
+
+  useEffect(() => {
+    if (localData.userId !== currentUser.id) {
+      localStorage.clear();
+      setLocalData({});
+    }
+    console.log(localData);
+    if (localData.searchWord) {
+      onSearchMovies(localData);
+    }
   }, []);
 
   /* РЕГИСТРАЦИЯ */
@@ -123,6 +153,7 @@ function App() {
   const handleSignOut = () => {
     auth.signOut()
       .then(() => setIsLoggedIn(false))
+      .then(() => localStorage.clear())
       .catch(err => handleResponseError('signout', err))
       .finally(() => {
         history.push('/');
@@ -149,12 +180,18 @@ function App() {
     setIsSideMenuOpened(false);
   }
 
+  /* ОБРАБОТКА КНОПКИ ЕЩЕ */
+
+  const handleShowMore = () => {
+    setStep(step + cardsOnPage);
+  }
+
   /* ЗАГРУЗКА КАРТОЧЕК С СЕРВЕРА BEATFILMS */
   useEffect(() => {
     if (isLoggedIn) {
       setIsLoading(true);
       moviesApi.getInitialMovies()
-        .then(res => setFilms(res))
+        .then(res => setBeatMovies(res))
         .catch(err => {
           console.log(err);
         })
@@ -164,12 +201,41 @@ function App() {
 
   /* ПОИСК */
 
-  const onSearch = (data) => {
-    //localStorage.setItem('searchShort', data.shortMovies);
-    console.log(data);
+  const compareSearch = (str, word) => {
+    //console.log(str.toLowerCase().includes(word.toLowerCase()));
+    return str.toLowerCase().includes(word.toLowerCase());
+    // НУЖНО РЕШИТЬ ПРОБЛЕМУ С БУКВОЙ Ё
   }
 
+  const searchMovie = (films, searchWord, short) => {
+    // films.forEach(i=>console.log(i.nameRU));
+    if (short) {
+      return films.filter((movie) => compareSearch(movie.nameRU, searchWord) && movie.duration <= 40);
+      //return films.filter((movie) => movie.nameRU.toLowerCase().includes(searchWord.toLowerCase()) && movie.duration <= 40);
+    }
+    return films.filter((movie) => compareSearch(movie.nameRU, searchWord));
+  }
 
+  const onSearchMovies = (data) => {
+    setIsLoading(true);
+    setIsFormSending(true);
+    console.log(data.shortMovies);
+    setStep(cardsOnPage);
+    setFilteredMovies(searchMovie(beatMovies, data.searchWord, data.shortMovies));
+    localStorage.setItem('searchMovies', JSON.stringify({
+      userId: currentUser.id,
+      shortMovies: data.shortMovies,
+      searchWord: data.searchWord
+    }));
+    setLocalData(JSON.parse(localStorage.getItem('searchMovies')));
+    setIsLoading(false);
+    setIsFormSending(false);
+  }
+
+  const onSearchSavedMovies = (data) => {
+    setStep(cardsOnPage);
+    setFilteredSavedMovies(searchMovie(savedMovies, data.searchWord, data.shortMovies));
+  }
 
   /* PROFILE */
 
@@ -242,26 +308,30 @@ function App() {
                 path="/movies"
                 exact
                 component={Movies}
-                films={films}
+                movies={filteredMovies}
                 savedMovies={savedMovies}
                 isLoading={isLoading}
-                isAuthChecking={isAuthChecking}
                 isLoggedIn={isLoggedIn}
+                isAuthChecking={isAuthChecking}
                 isSending={isFormSending}
-                onSearch={onSearch}
+                onSearch={onSearchMovies}
                 shortMovies={isShortMovieSelected}
                 setShortMovies={setIsShortMovieSelected}
+                localData={localData}
+                step={step}
+                handleShowMore={handleShowMore}
               />
               <ProtectedRoute
                 path="/saved-movies"
                 exact
                 component={SavedMovies}
-                films={savedMovies}
+                movies={savedMovies}
+                filteredMovies={filteredSavedMovies}
                 isLoading={isLoading}
                 isAuthChecking={isAuthChecking}
                 isLoggedIn={isLoggedIn}
                 isSending={isFormSending}
-                onSearch={onSearch}
+                onSearch={onSearchSavedMovies}
                 shortMovies={isShortMovieSelected}
                 setShortMovies={setIsShortMovieSelected}
               />
