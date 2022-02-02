@@ -15,6 +15,12 @@ function EditProfilePopup(props) {
     }
   }, [currentUser, resetForm]);
 
+  useEffect(() => {
+    if (currentUser.name === values.name && currentUser.email === values.email) {
+      resetForm(currentUser, {}, false);
+    }
+  },[currentUser, values, resetForm]);
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
     props.onUpdateUser(values);

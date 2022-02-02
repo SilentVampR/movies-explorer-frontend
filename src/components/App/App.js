@@ -20,7 +20,6 @@ import SideMenu from '../Navigation/SideMenu/SideMenu';
 import NotFound from '../NotFound/NotFound';
 import Profile from '../Profile/Profile';
 import EditProfilePopup from '../EditProfilePopup/EditProfilePopup';
-import { savedMoviesList } from '../../utils/constants';
 import Preloader from '../Preloader/Preloader';
 
 function App() {
@@ -28,23 +27,37 @@ function App() {
 
   /* STATES */
   const [isLoading, setIsLoading] = useState(false); // Состояние загрузки данных
+  const [isSaving, setIsSaving] = useState(false); // Состояние сохранения карточки (в работе)
+  const [isFormSending, setIsFormSending] = useState(false); // Состояние отправки данных на сервер
+
   const [isAuthChecking, setIsAuthChecking] = useState(true); // Состояние проверки аутентификации. По умолчанию включено
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Состояние авторизации пользователя
   const [currentUser, setCurentUser] = useState({}); // Данные пользователя
+
   const [beatMovies, setBeatMovies] = useState([]); // Загруженные фильмы с сервера
   const [savedMovies, setSavedMovies] = useState([]); // Сохраненные фильмы пользователя в нашей базе данных
   const [isSideMenuOpened, setIsSideMenuOpened] = useState(false); // Состояние бокового меню (по умолчанию закрыто)
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false); // Состояние попапа формы редактирования профиля
-  const [isFormSending, setIsFormSending] = useState(false); // Состояние отправки данных на сервер
-  const [isShortMovieSelected, setIsShortMovieSelected] = useState(false); // Состояние чекбокса сохраненных фильмов
-  const [localData, setLocalData] = useState({}); // Локальные данные
+
   const [filteredMovies, setFilteredMovies] = useState([]); // Массив с отфильтрованными фильмами
   const [filteredSavedMovies, setFilteredSavedMovies] = useState([]); // Массив с отфильтрованными сохраненными фильмами
-  const [cardsOnPage, setCardsOnPage] = useState(12); //Количество карточек на странице. Зависит от ширины экрана.
-  const [step, setStep] = useState(3);
-  const [isFiltered, setIsFiltered] = useState(false);
-  const [isFirstStart, setIsFirstStart] = useState(true);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const [isFiltered, setIsFiltered] = useState(false); // Применен ли фильтр на странице фильмы
+  const [isSavedFiltered, setIsSavedFiltered] = useState(false); // Применен ли фильтр на странице фильмы
+
+  const [isShortMovieSelected, setIsShortMovieSelected] = useState(false); // Состояние чекбокса сохраненных фильмов
+  const [isSavedShortMovieSelected, setIsSavedShortMovieSelected] = useState(false); // Состояние чекбокса сохраненных фильмов в сохраненных
+
+  const [isFirstStart, setIsFirstStart] = useState(true); //При первой загрузке проверяем локальное хранилище на предмет поисковых данных
+
+  const [localData, setLocalData] = useState({}); // Локальные данные
+
+  const [cardsOnPage, setCardsOnPage] = useState(12); // Количество карточек на странице. Зависит от ширины экрана.
+  const [step, setStep] = useState(3); // Количество карточек, которые появляются после нажатия кнопки Еще
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Состояние ширины окна при загрузке
+
+  /* УСТАНОВКА ЗНАЧЕНИЙ ШАГА И ОБЩЕГО КОЛИЧЕСТВА КАРТОЧЕК В ЗАВИСИМОСТИ ОТ РАЗМЕРА ОКНА */
 
   const resize = () => {
     setWindowWidth(window.innerWidth);
@@ -72,15 +85,8 @@ function App() {
     setIsLoading(false);
   }, [windowWidth, isLoading]);
 
-  const handleSaveMovie = (data) => {
-    console.log('Saving started');
-    myApi.addMovie(data)
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
-      .finally(() => console.log('Saving finished'));
-  }
+  /* ОБЩИЙ ОБРАБОТЧИК ОШИБОК */
 
-  /* Общий обработчик ошибок */
   const handleResponseError = (type, status) => {
     if (type === 'signin') {
       if (status === 400) {
@@ -115,7 +121,7 @@ function App() {
         setCurentUser({
           name: res.data.name,
           email: res.data.email,
-          id: res.data._id // ID пользователя пока сохраняем, например для идентификации данных в локальном хранилище
+          _id: res.data._id
         });
         setIsLoggedIn(true);
       })
@@ -125,8 +131,6 @@ function App() {
       })
       .finally(() => setIsAuthChecking(false));
   }, []);
-
-
 
   /* ДОСТАЕМ ДАННЫЕ ИЗ ЛОКАЛЬНОГО ХРАНИЛИЩА */
 
@@ -140,12 +144,14 @@ function App() {
 
   useEffect(() => {
     if (localData) {
-      if (localData.userId !== currentUser.id) {
+      if (localData.userId !== currentUser._id) {
         localStorage.clear();
         return setLocalData({});
       }
     }
   }, [localData]);
+
+  /* ЕСЛИ ПОЛЬЗОВАТЕЛЬ БЫЛ АВТОРИЗОВАН И ИСПОЛЬЗОВАЛ ФИЛЬТРАЦИЮ - ЗАГРУЖАЕМ ПОСЛЕДНИЕ ЗНАЧЕНИЯ ФИЛЬТРА */
 
   useEffect(() => {
     if (localData && isFirstStart && beatMovies.length > 0) {
@@ -180,6 +186,7 @@ function App() {
   }
 
   /* ВХОД */
+
   const handleSignIn = ({ email, password }) => {
     setIsFormSending(true);
     auth.signIn({ email, password })
@@ -195,6 +202,7 @@ function App() {
   }
 
   /* ВЫХОД */
+
   const handleSignOut = () => {
     auth.signOut()
       .then(() => setIsLoggedIn(false))
@@ -206,17 +214,39 @@ function App() {
   }
 
   /* ЗАГРУЗКА СОХРАНЕННЫХ ФИЛЬМОВ (ТОЛЬКО ДЛЯ АВТОРИЗОВАННЫХ) */
+
   useEffect(() => {
     if (isLoggedIn) {
       setIsLoading(true);
-      setSavedMovies( //Временное решение с сохраненными фильмами
-        savedMoviesList
-      )
-      setIsLoading(false);
+      myApi.getSavedMovies()
+        .then(res => setSavedMovies(res.data))
+        .catch(err => handleResponseError('getMovies', err))
+        .finally(() => setIsLoading(false));
     }
   }, [isLoggedIn]);
 
+  /* СОХРАНЕНИЕ И УДАЛЕНИЕ ФИЛЬМА ИЗ СОХРАНЕННЫХ */
+
+  const handleSaveMovie = (data) => {
+    setIsSaving(true);
+    myApi.addMovie(data)
+      .then(res => setSavedMovies([res.data, ...savedMovies]))
+      .catch(err => handleResponseError('saveMovie', err.statusCode))
+      .finally(() => setIsSaving(false));
+  }
+
+  const handleDeleteMovie = (id) => {
+    setIsSaving(true);
+    myApi.removeMovie(id)
+      .then(() => {
+        setSavedMovies(movies => movies.filter((movie) => movie._id !== id))
+      })
+      .catch(err => handleResponseError('removeMovie', err))
+      .finally(() => setIsSaving(true));
+  }
+
   /* ОБРАБОТЧИКИ КНОПОК МЕНЮ */
+
   const handlerBurgerClick = () => {
     setIsSideMenuOpened(true);
   }
@@ -228,11 +258,11 @@ function App() {
   /* ОБРАБОТКА КНОПКИ ЕЩЕ */
 
   const handleShowMore = () => {
-    const nextValue = cardsOnPage + step
-    setCardsOnPage(nextValue);
+    setCardsOnPage(cardsOnPage + step);
   }
 
   /* ЗАГРУЗКА КАРТОЧЕК С СЕРВЕРА BEATFILMS */
+
   useEffect(() => {
     if (isLoggedIn) {
       setIsLoading(true);
@@ -267,7 +297,7 @@ function App() {
     setIsFirstStart(false);
     setFilteredMovies(filterMovies(beatMovies, data.searchWord, data.shortMovies));
     localStorage.setItem('searchMovies', JSON.stringify({
-      userId: currentUser.id,
+      userId: currentUser._id,
       shortMovies: data.shortMovies,
       searchWord: data.searchWord
     }));
@@ -275,7 +305,9 @@ function App() {
   }
 
   const onFilterSavedMovies = (data) => {
-    setFilteredSavedMovies(onFilterMovies(savedMovies, data.searchWord, data.shortMovies));
+    setIsSavedFiltered(true);
+    setFilteredSavedMovies(filterMovies(savedMovies, data.searchWord, data.shortMovies));
+    //setSavedMovies(filterMovies(savedMovies, data.searchWord, data.shortMovies));
   }
 
   /* PROFILE */
@@ -363,20 +395,23 @@ function App() {
                 handleShowMore={handleShowMore}
                 isFiltered={isFiltered}
                 handleSaveMovie={handleSaveMovie}
+                handleDeleteMovie={handleDeleteMovie}
               />
               <ProtectedRoute
                 path="/saved-movies"
                 exact
                 component={SavedMovies}
-                movies={savedMovies}
-                filteredMovies={filteredSavedMovies}
+                movies={isSavedFiltered ? filteredSavedMovies : savedMovies}
                 isLoading={isLoading}
                 isAuthChecking={isAuthChecking}
                 isLoggedIn={isLoggedIn}
                 isSending={isFormSending}
-                onFilter={onFilterMovies}
-                shortMovies={isShortMovieSelected}
-                setShortMovies={setIsShortMovieSelected}
+                onFilter={onFilterSavedMovies}
+                shortMovies={isSavedShortMovieSelected}
+                setShortMovies={setIsSavedShortMovieSelected}
+                handleDeleteMovie={handleDeleteMovie}
+                setIsSavedFiltered={setIsSavedFiltered}
+                isSavedFiltered={isSavedFiltered}
               />
               <ProtectedRoute
                 path="/profile"

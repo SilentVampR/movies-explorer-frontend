@@ -3,7 +3,21 @@ import './MoviesCardList.css';
 import MovieCard from '../MovieCard/MovieCard';
 import Preloader from '../Preloader/Preloader';
 
-function MoviesCardList({ isLoading, movies, cardsOnPage, page, savedMovies, handleSaveMovie }) {
+function MoviesCardList({
+  isLoading,
+  movies,
+  cardsOnPage,
+  page,
+  savedMovies,
+  handleSaveMovie,
+  handleDeleteMovie,
+  setIsSavedFiltered
+}) {
+  React.useEffect(() => {
+    if(setIsSavedFiltered){
+      setIsSavedFiltered(false)
+    }
+  },[setIsSavedFiltered]);
   return (
     <>
       {isLoading ? <Preloader /> :
@@ -13,10 +27,11 @@ function MoviesCardList({ isLoading, movies, cardsOnPage, page, savedMovies, han
             {
               movies.slice(0, cardsOnPage).map((item) => (
                 <MovieCard
-                  key={item.id}
+                  key={item.id ? item.id : item.movieId}
                   page={page}
                   savedMovies={savedMovies}
                   handleSaveMovie={handleSaveMovie}
+                  handleDeleteMovie={handleDeleteMovie}
                   movie={item}
                 />
               ))

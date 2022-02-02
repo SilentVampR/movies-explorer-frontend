@@ -2,16 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './MovieCard.css';
 import { beatFilmApiURL, urlPattern } from '../../utils/constants';
 
-function MovieCard({ page, savedMovies, hanleSaveMovie, movie }) {
-  // id={item.id}
-  // title={item.nameRU}
-  // duration={item.duration}
-  // thumb={item.image.url}
-
+function MovieCard({ page, savedMovies, handleSaveMovie, handleDeleteMovie, movie }) {
   const [buttonType, setButtonType] = useState('');
   const [isSaved, setIsSaved] = useState(false);
 
-  const thumb = beatFilmApiURL + movie.image.url;
+  const thumb = movie.image.url ? beatFilmApiURL + movie.image.url : movie.image;
   const title = movie.nameRU;
   const durationHour = Math.floor(movie.duration / 60);
   const durationMinute = movie.duration - durationHour * 60;
@@ -22,23 +17,23 @@ function MovieCard({ page, savedMovies, hanleSaveMovie, movie }) {
 
   useEffect(() => {
     if (savedMovies && page !== 'saved-movies') {
-      setIsSaved(savedMovies.some(item => item.id === movie.id));
+      setIsSaved(savedMovies.some(item => item.movieId === movie.id));
     }
   }, [page, savedMovies, movie.id]);
 
   useEffect(() => {
-    (page === 'movies' && isSaved) && setButtonType(' movie__button_type_saved');
-    (page === 'saved-movies') && setButtonType(' movie__button_type_delete');
+    (page === 'movies' && isSaved) && setButtonType('saved');
+    (page === 'saved-movies') && setButtonType('delete');
   }, [isSaved, page]);
-//console.log(movie);
+
   return (
     <div className="movie">
-      <a href={checkUrl(movie.trailerLink)} className="movie__trailer-link" target="_blank" rel="noreferrer">
+      <a href={checkUrl(movie.trailerLink ? movie.trailerLink : movie.trailer)} className="movie__trailer-link" target="_blank" rel="noreferrer">
         <img src={thumb} alt={title} className="movie__thumb" />
       </a>
       <div className="movie__footer">
         <h2 className="movie__title">{title}</h2>
-        <button className={`movie__button` + buttonType}></button>
+        <button className={`movie__button${buttonType ? ' movie__button_type_' + buttonType: ''}`} onClick={!buttonType ? () => handleSaveMovie(movie) : () => handleDeleteMovie(movie._id)}></button>
       </div>
       <p className="movie__duration">{durationHour}ч {durationMinute}м</p>
     </div>

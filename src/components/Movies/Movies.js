@@ -18,6 +18,7 @@ function Movies({
   handleShowMore,
   isFiltered,
   handleSaveMovie,
+  handleDeleteMovie,
 }) {
   return (
     <>
@@ -39,6 +40,7 @@ function Movies({
           localData={localData}
           cardsOnPage={cardsOnPage}
           handleSaveMovie={handleSaveMovie}
+          handleDeleteMovie={handleDeleteMovie}
         />
         <ShowMore
           handleShowMore={handleShowMore}

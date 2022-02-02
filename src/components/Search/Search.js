@@ -11,6 +11,7 @@ function Search({
   setShortMovies,
   localData,
   isFiltered,
+  isSavedFiltered
 }) {
   const currentUser = useContext(CurrentUserContext);
   const { values, errors, isValid, handleOnChange, resetForm } = useFormWithValidation();
@@ -19,7 +20,7 @@ function Search({
     resetForm({
       ...values,
       shortMovies: shortMovies,
-      searchWord: (localData && localData.searchWord) && localData.searchWord
+      searchWord: (localData && localData.searchWord) ? localData.searchWord : values.searchWord
     }, errors, (localData && (localData.searchWord || shortMovies)) ? true : isValid);
   }, [shortMovies, resetForm, currentUser, localData]);
 
@@ -32,6 +33,10 @@ function Search({
     e.target.classList.toggle('checkbox-stylized_enabled');
     setShortMovies(!shortMovies);
     if (isFiltered && isValid) {
+      values.shortMovies = !shortMovies;
+      onFilter(values);
+    }
+    if (isSavedFiltered && isValid) {
       values.shortMovies = !shortMovies;
       onFilter(values);
     }

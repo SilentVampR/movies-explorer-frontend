@@ -1,10 +1,15 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import './SignIn.css';
 import Form from '../Form/Form';
 import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
-function SignIn({ isSending, onSignIn }) {
+function SignIn({ isSending, onSignIn, isLoggedIn }) {
   const { values, errors, isValid, handleOnChange } = useFormWithValidation();
+
+  if (isLoggedIn) {
+    return <Redirect to="./" />
+  }
 
   const handleOnSubmit = (e) => {
     e.preventDefault();

@@ -11,6 +11,9 @@ function SavedMovies({
   setShortMovies,
   movies,
   isLoading,
+  handleDeleteMovie,
+  setIsSavedFiltered,
+  isSavedFiltered,
 }) {
   return (
     <>
@@ -19,11 +22,14 @@ function SavedMovies({
         onFilter={onFilter}
         shortMovies={shortMovies}
         setShortMovies={setShortMovies}
+        isSavedFiltered={isSavedFiltered}
       />
       <section className="movies">
         <MoviesCardList
           movies={movies}
           isLoading={isLoading}
+          handleDeleteMovie={handleDeleteMovie}
+          setIsSavedFiltered={setIsSavedFiltered}
           page="saved-movies" />
       </section>
     </>

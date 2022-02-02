@@ -1,4 +1,4 @@
-import { myApiURL } from './constants';
+import { myApiURL, urlPattern, beatFilmApiURL } from './constants';
 
 class MyApi {
   constructor({ apiURL, headers }) {
@@ -36,22 +36,36 @@ class MyApi {
       })
   }
 
+  getSavedMovies() {
+    return fetch(`${this._apiURL}/movies`, {
+      credentials: 'include',
+      method: 'GET',
+      headers: this._headers
+    })
+      .then(res => {
+        return this._checkResponse(res, 'Ошибка получения информации о пользователе с сервера');
+      })
+  }
+
   addMovie(data) {
+    const trailerLink = urlPattern.test(data.trailerLink) ? data.trailerLink : 'https://youtu.be/dQw4w9WgXcQ';
+    const thumbnailUrl = beatFilmApiURL + data.image.formats.thumbnail.url;
+    const imageUrl = beatFilmApiURL + data.image.url;
     return fetch(this._apiURL + '/movies', {
       credentials: 'include',
       method: 'POST',
       body: JSON.stringify({
         nameRU: data.nameRU,
-        nameEN: data.nameEN,
+        nameEN: data.nameEN ? data.nameEN : data.nameRU,
         movieId: data.id,
-        thumbnail: data.thumbnail,
-        trailer: data.trailer,
-        image: data.image,
+        thumbnail: thumbnailUrl,
+        trailer: trailerLink,
+        image: imageUrl,
         description: data.description,
         year: data.year,
         duration: data.duration,
-        director: data.direcrot,
-        country: data.country,
+        director: data.director,
+        country: data.country ? data.country : 'Не указана',
       }),
       headers: this._headers
     })
