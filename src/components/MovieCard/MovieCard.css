@@ -2,6 +2,20 @@
   background-color: #222222;
   border-radius: 10px;
   overflow: hidden;
+  width: 93.75vw;
+  max-width: 364px;
+}
+
+@media screen and (min-width: 768px) {
+  .movie {
+    max-width: 339px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .movie {
+    max-width: 364px;
+  }
 }
 
 .movie__thumb {

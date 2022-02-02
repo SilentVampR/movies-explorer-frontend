@@ -7,25 +7,27 @@ import ShowMore from '../ShowMore/ShowMore';
 
 function Movies({
   isSending,
-  onSearch,
+  onFilter,
   shortMovies,
   setShortMovies,
   localData,
   movies,
   isLoading,
   savedMovies,
-  step,
+  cardsOnPage,
   handleShowMore,
-  setIsSending,
+  isFiltered,
+  handleSaveMovie,
 }) {
   return (
     <>
       <Search
         isSending={isSending}
-        onSearch={onSearch}
+        onFilter={onFilter}
         shortMovies={shortMovies}
         setShortMovies={setShortMovies}
         localData={localData}
+        isFiltered={isFiltered}
       />
       <section className="movies">
         <MoviesCardList
@@ -35,11 +37,12 @@ function Movies({
           page="movies"
           shortMovies={shortMovies}
           localData={localData}
-          step={step}
+          cardsOnPage={cardsOnPage}
+          handleSaveMovie={handleSaveMovie}
         />
         <ShowMore
           handleShowMore={handleShowMore}
-          step={step}
+          cardsOnPage={cardsOnPage}
           movies={movies}
         />
       </section>

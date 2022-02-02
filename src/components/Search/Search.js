@@ -6,33 +6,35 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function Search({
   isSending,
-  onSearch,
+  onFilter,
   shortMovies,
   setShortMovies,
-  localData
+  localData,
+  isFiltered,
 }) {
   const currentUser = useContext(CurrentUserContext);
   const { values, errors, isValid, handleOnChange, resetForm } = useFormWithValidation();
 
-  /* if (localData && localData.shortMovies) {
-    setShortMovies(!localData.shortMovies);
-  } */
   useEffect(() => {
     resetForm({
       ...values,
       shortMovies: shortMovies,
       searchWord: (localData && localData.searchWord) && localData.searchWord
-    }, errors, (localData && localData.searchWord) ? true : isValid);
+    }, errors, (localData && (localData.searchWord || shortMovies)) ? true : isValid);
   }, [shortMovies, resetForm, currentUser, localData]);
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    onSearch(values);
+    onFilter(values);
   }
 
   const handleCheckBox = (e) => {
     e.target.classList.toggle('checkbox-stylized_enabled');
     setShortMovies(!shortMovies);
+    if (isFiltered && isValid) {
+      values.shortMovies = !shortMovies;
+      onFilter(values);
+    }
   }
 
   return (
@@ -42,10 +44,8 @@ function Search({
           className="search-form__input"
           name="searchWord"
           onChange={handleOnChange}
-          required
           placeholder="Фильм"
-          minLength="2"
-          pattern='[a-zA-Zа-яА-Я0-9 -]{1,}'
+          pattern='[a-zA-Zа-яА-Яё0-9 -]{1,}'
           value={values.searchWord || ""}
         />
         <input

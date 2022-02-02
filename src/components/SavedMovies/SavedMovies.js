@@ -6,17 +6,17 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
 function SavedMovies({
   isSending,
-  onSearch,
+  onFilter,
   shortMovies,
   setShortMovies,
   movies,
-  isLoading
+  isLoading,
 }) {
   return (
     <>
       <Search
         isSending={isSending}
-        onSearch={onSearch}
+        onFilter={onFilter}
         shortMovies={shortMovies}
         setShortMovies={setShortMovies}
       />

@@ -1,6 +1,8 @@
 export const beatFilmApiURL = "https://api.nomoreparties.co";
 export const myApiURL = "https://silent-server.nomoredomains.rocks";
 
+export const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/i;
+
 export const savedMoviesList = [
   {
     "id": 1,

@@ -37,11 +37,48 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false); // Состояние попапа формы редактирования профиля
   const [isFormSending, setIsFormSending] = useState(false); // Состояние отправки данных на сервер
   const [isShortMovieSelected, setIsShortMovieSelected] = useState(false); // Состояние чекбокса сохраненных фильмов
-  const [localData, setLocalData] = useState({});
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [filteredSavedMovies, setFilteredSavedMovies] = useState([]);
-  const [cardsOnPage, setCardsOnPage] = useState(3);
-  const [step, setStep] = useState(cardsOnPage);
+  const [localData, setLocalData] = useState({}); // Локальные данные
+  const [filteredMovies, setFilteredMovies] = useState([]); // Массив с отфильтрованными фильмами
+  const [filteredSavedMovies, setFilteredSavedMovies] = useState([]); // Массив с отфильтрованными сохраненными фильмами
+  const [cardsOnPage, setCardsOnPage] = useState(12); //Количество карточек на странице. Зависит от ширины экрана.
+  const [step, setStep] = useState(3);
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [isFirstStart, setIsFirstStart] = useState(true);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const resize = () => {
+    setWindowWidth(window.innerWidth);
+  }
+
+  window.addEventListener('resize', resize);
+
+  useEffect(() => {
+    if (windowWidth >= 1280) {
+      setStep(3);
+      if (cardsOnPage <= 12 || isLoading) {
+        setCardsOnPage(12)
+      };
+    } else if (windowWidth >= 768 || isLoading) {
+      setStep(2);
+      if (cardsOnPage <= 8) {
+        setCardsOnPage(8)
+      };
+    } else {
+      setStep(2);
+      if (cardsOnPage <= 5 || isLoading) {
+        setCardsOnPage(5)
+      };
+    }
+    setIsLoading(false);
+  }, [windowWidth, isLoading]);
+
+  const handleSaveMovie = (data) => {
+    console.log('Saving started');
+    myApi.addMovie(data)
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+      .finally(() => console.log('Saving finished'));
+  }
 
   /* Общий обработчик ошибок */
   const handleResponseError = (type, status) => {
@@ -89,6 +126,8 @@ function App() {
       .finally(() => setIsAuthChecking(false));
   }, []);
 
+
+
   /* ДОСТАЕМ ДАННЫЕ ИЗ ЛОКАЛЬНОГО ХРАНИЛИЩА */
 
   useEffect(() => {
@@ -100,15 +139,21 @@ function App() {
   /* ПРОВЕРКА СООТВЕТСВИЯ ЛОКАЛЬНОГО ХРАНИЛИЩА ТЕКУЩЕМУ ПОЛЬЗОВАТЕЛЮ */
 
   useEffect(() => {
-    if (localData.userId !== currentUser.id) {
-      localStorage.clear();
-      setLocalData({});
+    if (localData) {
+      if (localData.userId !== currentUser.id) {
+        localStorage.clear();
+        return setLocalData({});
+      }
     }
-    console.log(localData);
-    if (localData.searchWord) {
-      onSearchMovies(localData);
+  }, [localData]);
+
+  useEffect(() => {
+    if (localData && isFirstStart && beatMovies.length > 0) {
+      setIsFirstStart(false);
+      setIsShortMovieSelected(localData.shortMovies);
+      onFilterMovies(localData);
     }
-  }, []);
+  }, [isFirstStart, localData, beatMovies]);
 
   /* РЕГИСТРАЦИЯ */
 
@@ -183,7 +228,8 @@ function App() {
   /* ОБРАБОТКА КНОПКИ ЕЩЕ */
 
   const handleShowMore = () => {
-    setStep(step + cardsOnPage);
+    const nextValue = cardsOnPage + step
+    setCardsOnPage(nextValue);
   }
 
   /* ЗАГРУЗКА КАРТОЧЕК С СЕРВЕРА BEATFILMS */
@@ -201,40 +247,35 @@ function App() {
 
   /* ПОИСК */
 
-  const compareSearch = (str, word) => {
-    //console.log(str.toLowerCase().includes(word.toLowerCase()));
-    return str.toLowerCase().includes(word.toLowerCase());
-    // НУЖНО РЕШИТЬ ПРОБЛЕМУ С БУКВОЙ Ё
+  const compareStrings = (str, word) => {
+    return str.replace(/(ё)/gi, 'е').toLowerCase().includes(word.replace(/(ё)/gi, 'е').toLowerCase());
   }
 
-  const searchMovie = (films, searchWord, short) => {
-    // films.forEach(i=>console.log(i.nameRU));
+  const filterMovies = (films, searchWord, short) => {
     if (short) {
-      return films.filter((movie) => compareSearch(movie.nameRU, searchWord) && movie.duration <= 40);
-      //return films.filter((movie) => movie.nameRU.toLowerCase().includes(searchWord.toLowerCase()) && movie.duration <= 40);
+      if (searchWord.length !== 0) {
+        return films.filter((movie) => compareStrings(movie.nameRU, searchWord) && movie.duration <= 40);
+      }
+      return films.filter((movie) => movie.duration <= 40);
     }
-    return films.filter((movie) => compareSearch(movie.nameRU, searchWord));
+    return films.filter((movie) => compareStrings(movie.nameRU, searchWord));
   }
 
-  const onSearchMovies = (data) => {
+  const onFilterMovies = (data) => {
     setIsLoading(true);
-    setIsFormSending(true);
-    console.log(data.shortMovies);
-    setStep(cardsOnPage);
-    setFilteredMovies(searchMovie(beatMovies, data.searchWord, data.shortMovies));
+    setIsFiltered(true);
+    setIsFirstStart(false);
+    setFilteredMovies(filterMovies(beatMovies, data.searchWord, data.shortMovies));
     localStorage.setItem('searchMovies', JSON.stringify({
       userId: currentUser.id,
       shortMovies: data.shortMovies,
       searchWord: data.searchWord
     }));
     setLocalData(JSON.parse(localStorage.getItem('searchMovies')));
-    setIsLoading(false);
-    setIsFormSending(false);
   }
 
-  const onSearchSavedMovies = (data) => {
-    setStep(cardsOnPage);
-    setFilteredSavedMovies(searchMovie(savedMovies, data.searchWord, data.shortMovies));
+  const onFilterSavedMovies = (data) => {
+    setFilteredSavedMovies(onFilterMovies(savedMovies, data.searchWord, data.shortMovies));
   }
 
   /* PROFILE */
@@ -308,18 +349,20 @@ function App() {
                 path="/movies"
                 exact
                 component={Movies}
-                movies={filteredMovies}
+                movies={isFiltered ? filteredMovies : beatMovies}
                 savedMovies={savedMovies}
                 isLoading={isLoading}
                 isLoggedIn={isLoggedIn}
                 isAuthChecking={isAuthChecking}
                 isSending={isFormSending}
-                onSearch={onSearchMovies}
+                onFilter={onFilterMovies}
                 shortMovies={isShortMovieSelected}
                 setShortMovies={setIsShortMovieSelected}
                 localData={localData}
-                step={step}
+                cardsOnPage={cardsOnPage}
                 handleShowMore={handleShowMore}
+                isFiltered={isFiltered}
+                handleSaveMovie={handleSaveMovie}
               />
               <ProtectedRoute
                 path="/saved-movies"
@@ -331,7 +374,7 @@ function App() {
                 isAuthChecking={isAuthChecking}
                 isLoggedIn={isLoggedIn}
                 isSending={isFormSending}
-                onSearch={onSearchSavedMovies}
+                onFilter={onFilterMovies}
                 shortMovies={isShortMovieSelected}
                 setShortMovies={setIsShortMovieSelected}
               />
