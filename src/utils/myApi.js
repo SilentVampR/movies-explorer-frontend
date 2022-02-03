@@ -7,7 +7,7 @@ class MyApi {
   }
 
   _checkResponse(res, text) {
-    return res.ok ? res.json() : Promise.reject({ error: text, status: res.status });
+    return res.ok ? res.json() : Promise.reject(res.status);
   }
 
   getUserInfo() {

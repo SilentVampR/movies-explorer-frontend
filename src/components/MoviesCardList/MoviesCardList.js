@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './MoviesCardList.css';
 import MovieCard from '../MovieCard/MovieCard';
 import Preloader from '../Preloader/Preloader';
@@ -11,9 +11,11 @@ function MoviesCardList({
   savedMovies,
   handleSaveMovie,
   handleDeleteMovie,
-  setIsSavedFiltered
+  setIsSavedFiltered,
+  isFiltered,
+  isSavedFiltered,
 }) {
-  React.useEffect(() => {
+  useEffect(() => {
     if(setIsSavedFiltered){
       setIsSavedFiltered(false)
     }
@@ -37,7 +39,7 @@ function MoviesCardList({
               ))
             }
           </div>
-          ) : <div className="movies__no-movies-text">Поиск не дал результатов</div>
+          ) : (isFiltered || isSavedFiltered) && <div className="movies__no-movies-text">Поиск не дал результатов</div>
         ) :
           <div className="movies__no-movies-text">Нет сохраненных фильмов</div>
       }

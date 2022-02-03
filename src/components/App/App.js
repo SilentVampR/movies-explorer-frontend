@@ -5,6 +5,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import ProtectedComponent from '../ProtectedComponent/ProtectedComponent';
 import './App.css';
 import * as auth from '../../utils/auth';
+import getResponseError from '../../helpers/getResponseError';
 
 import moviesApi from '../../utils/beatFilmsApi';
 import myApi from '../../utils/myApi';
@@ -21,6 +22,7 @@ import NotFound from '../NotFound/NotFound';
 import Profile from '../Profile/Profile';
 import EditProfilePopup from '../EditProfilePopup/EditProfilePopup';
 import Preloader from '../Preloader/Preloader';
+import InfoToolTip from '../InfoToolTip/InfoToolTip';
 
 function App() {
   const history = useHistory();
@@ -36,8 +38,16 @@ function App() {
 
   const [beatMovies, setBeatMovies] = useState([]); // Загруженные фильмы с сервера
   const [savedMovies, setSavedMovies] = useState([]); // Сохраненные фильмы пользователя в нашей базе данных
+
   const [isSideMenuOpened, setIsSideMenuOpened] = useState(false); // Состояние бокового меню (по умолчанию закрыто)
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false); // Состояние попапа формы редактирования профиля
+
+  const toolTipParams = {
+    opened: false, // false
+    error: false, // false
+    message: '', // ''
+  }
+  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(toolTipParams);
 
   const [filteredMovies, setFilteredMovies] = useState([]); // Массив с отфильтрованными фильмами
   const [filteredSavedMovies, setFilteredSavedMovies] = useState([]); // Массив с отфильтрованными сохраненными фильмами
@@ -59,11 +69,33 @@ function App() {
 
   /* УСТАНОВКА ЗНАЧЕНИЙ ШАГА И ОБЩЕГО КОЛИЧЕСТВА КАРТОЧЕК В ЗАВИСИМОСТИ ОТ РАЗМЕРА ОКНА */
 
-  const resize = () => {
-    setWindowWidth(window.innerWidth);
-  }
+  useEffect(() => {
+    const resize = () => {
+      setWindowWidth(window.innerWidth);
+    }
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, []);
 
-  window.addEventListener('resize', resize);
+  // const resize = () => {
+  //   setWindowWidth(window.innerWidth);
+  // }
+  // window.addEventListener('resize', resize);
+
+  const toolTipHandler = (error, text) => {
+    setIsInfoTooltipPopupOpen({
+      opened: true,
+      error: error,
+      message: text
+    });
+    setTimeout(() => {
+      setIsInfoTooltipPopupOpen({
+        opened: false,
+        error: error,
+        message: text
+      });
+    }, 3500);
+  }
 
   useEffect(() => {
     if (windowWidth >= 1280) {
@@ -71,9 +103,9 @@ function App() {
       if (cardsOnPage <= 12 || isLoading) {
         setCardsOnPage(12)
       };
-    } else if (windowWidth >= 768 || isLoading) {
+    } else if (windowWidth >= 768) {
       setStep(2);
-      if (cardsOnPage <= 8) {
+      if (cardsOnPage <= 8 || isLoading) {
         setCardsOnPage(8)
       };
     } else {
@@ -84,33 +116,6 @@ function App() {
     }
     setIsLoading(false);
   }, [windowWidth, isLoading]);
-
-  /* ОБЩИЙ ОБРАБОТЧИК ОШИБОК */
-
-  const handleResponseError = (type, status) => {
-    if (type === 'signin') {
-      if (status === 400) {
-        return console.log(`Не заполнено одно из полей. Статус: ${status}`);
-      } else if (status === 401) {
-        return console.log(`Неверно указан email или пароль. Статус: ${status}`);
-      } else {
-        return console.log(`Ошибка обработки запроса (попытка авторизации). Статус: ${status}`);
-      }
-    }
-    if (type === 'authcheck') {
-      if (status === 400) {
-        return console.log(`Куки не установлены. Статус: ${status}`);
-      } else if (status === 401) {
-        return console.log(`Ошибка авторизации. Статус: ${status}`);
-      } else {
-        return console.log(`Ошибка обработки запроса (проверка авторизации). Статус: ${status}`);
-      }
-    }
-    if (type === 'signout') {
-      return console.log(`Ошибка обработки запроса (попытка выхода из приложения). Статус: ${status}`);
-    }
-    return console.log(`Ошибка обработки запроса. Статус: ${status}`);
-  }
 
   /* ПРОВЕРКА АУТЕНТИФИКАЦИИ */
 
@@ -127,7 +132,7 @@ function App() {
       })
       .catch(err => {
         setIsLoggedIn(false);
-        handleResponseError('authcheck', err.status);
+        console.log(getResponseError('authcheck', err)); //Или вывести сообщением сразу? Подумаем...
       })
       .finally(() => setIsAuthChecking(false));
   }, []);
@@ -166,22 +171,15 @@ function App() {
   const handleSignUp = ({ name, email, password }) => {
     setIsFormSending(true);
     auth.signUp({ name, email, password })
-      .then(() => {
-        history.push('./signin');
-        /*setIsInfoTooltipPopupOpen({
-          opened: true,
-          error: false,
-          message: 'Вы успешно зарегистрировались!'
-        });*/
-      })
-      .catch(err => {
-        handleResponseError('Некорректно заполнено одно из полей', err);
-        /*setIsInfoTooltipPopupOpen({
-          opened: true,
-          error: true,
-          message: 'Что-то пошло не так! Попробуйте ещё раз.'
-        });*/
-      })
+      .then(() => auth.signIn({ email, password })
+        .then((res) => {
+          setIsLoggedIn(true);
+          setCurentUser({ name: res.name, email: res.email });
+          history.push('/movies');
+          toolTipHandler(false, 'Вы успешно зарегистрировались и авторизовались!');
+        })
+        .catch(err => toolTipHandler(true, getResponseError('signin', err))))
+      .catch(err => toolTipHandler(true, getResponseError('signup', err)))
       .finally(() => setIsFormSending(false));
   }
 
@@ -195,9 +193,7 @@ function App() {
         setCurentUser({ name: res.name, email: res.email });
         history.push('/movies');
       })
-      .catch(err => {
-        handleResponseError('signin', err);
-      })
+      .catch(err => toolTipHandler(true, getResponseError('signin', err)))
       .finally(() => setIsFormSending(false));
   }
 
@@ -207,7 +203,7 @@ function App() {
     auth.signOut()
       .then(() => setIsLoggedIn(false))
       .then(() => localStorage.clear())
-      .catch(err => handleResponseError('signout', err))
+      .catch(err => toolTipHandler(true, getResponseError('signout', err)))
       .finally(() => {
         history.push('/');
       })
@@ -220,7 +216,7 @@ function App() {
       setIsLoading(true);
       myApi.getSavedMovies()
         .then(res => setSavedMovies(res.data))
-        .catch(err => handleResponseError('getMovies', err))
+        .catch(err => console.log(getResponseError('getMovies', err))) //Ошибки в консоль. Это фоновая операция
         .finally(() => setIsLoading(false));
     }
   }, [isLoggedIn]);
@@ -231,7 +227,7 @@ function App() {
     setIsSaving(true);
     myApi.addMovie(data)
       .then(res => setSavedMovies([res.data, ...savedMovies]))
-      .catch(err => handleResponseError('saveMovie', err.statusCode))
+      .catch(err => toolTipHandler(true, getResponseError('saveMovie', err)))
       .finally(() => setIsSaving(false));
   }
 
@@ -239,9 +235,10 @@ function App() {
     setIsSaving(true);
     myApi.removeMovie(id)
       .then(() => {
-        setSavedMovies(movies => movies.filter((movie) => movie._id !== id))
+        setSavedMovies(movies => movies.filter((movie) => movie._id !== id));
+        setFilteredSavedMovies(movies => movies.filter((movie) => movie._id !== id));
       })
-      .catch(err => handleResponseError('removeMovie', err))
+      .catch(err => toolTipHandler(true, getResponseError('removeMovie', err)))
       .finally(() => setIsSaving(true));
   }
 
@@ -268,9 +265,7 @@ function App() {
       setIsLoading(true);
       moviesApi.getInitialMovies()
         .then(res => setBeatMovies(res))
-        .catch(err => {
-          console.log(err);
-        })
+        .catch(err => console.log(getResponseError('beatMovies', err))) //Выводим в консоль пока
         .finally(() => setIsLoading(false));
     }
   }, [isLoggedIn]);
@@ -321,9 +316,10 @@ function App() {
     myApi.editUserInfo(data)
       .then((res) => {
         setCurentUser(res.data);
-        closeAllPopups();
+        toolTipHandler(false, 'Данные успешно изменены');
+        setIsEditProfilePopupOpen(false);
       })
-      .catch(err => console.log(err))
+      .catch(err => toolTipHandler(true, getResponseError('updateUser', err)))
       .finally(() => setIsFormSending(false));
   }
 
@@ -350,6 +346,7 @@ function App() {
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
+    setIsInfoTooltipPopupOpen({ ...toolTipParams, opened: false });
   }
 
   return (
@@ -466,6 +463,11 @@ function App() {
           <SideMenu
             isSideMenuOpened={isSideMenuOpened}
             handleMenuClose={handleMenuClose}
+          />
+          <InfoToolTip
+            isOpened={isInfoTooltipPopupOpen}
+            onOverlayClick={handleOverlayClick}
+            onClose={closeAllPopups}
           />
         </>)}
     </CurrentUserContext.Provider>

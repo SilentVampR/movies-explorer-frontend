@@ -41,6 +41,7 @@ function Movies({
           cardsOnPage={cardsOnPage}
           handleSaveMovie={handleSaveMovie}
           handleDeleteMovie={handleDeleteMovie}
+          isFiltered={isFiltered}
         />
         <ShowMore
           handleShowMore={handleShowMore}

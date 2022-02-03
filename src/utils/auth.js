@@ -29,18 +29,6 @@ export const signIn = ({ email, password }) => {
     .then(checkResponse)
 };
 
-/*export const getUserData = () => {
-  return fetch(`${myApiURL}/users/me`, {
-    credentials: 'include',
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }
-  })
-    .then(checkResponse)
-}*/
-
 export const signOut = () => {
   return fetch(`${myApiURL}/signout`, {
     credentials: 'include',

@@ -6,11 +6,8 @@ class Api {
     this._headers = headers;
   }
 
-  _checkResponse(res, text) {
-    if(res.ok){
-      return res.json();
-    }
-    return Promise.reject(`${text} - ${res.status}`);
+  _checkResponse(res) {
+    return res.ok ? res.json() : Promise.reject(res.status);
   }
 
   getInitialMovies() {
@@ -18,7 +15,7 @@ class Api {
       headers: this._headers
     })
       .then(res => {
-        return this._checkResponse(res, 'Ошибка получения фильмов с сервера');
+        return this._checkResponse(res);
       })
   }
 

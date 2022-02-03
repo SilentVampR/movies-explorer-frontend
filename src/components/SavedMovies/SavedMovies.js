@@ -30,6 +30,7 @@ function SavedMovies({
           isLoading={isLoading}
           handleDeleteMovie={handleDeleteMovie}
           setIsSavedFiltered={setIsSavedFiltered}
+          isSavedFiltered={isSavedFiltered}
           page="saved-movies" />
       </section>
     </>
