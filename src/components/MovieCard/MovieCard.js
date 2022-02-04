@@ -5,6 +5,7 @@ import { beatFilmApiURL, urlPattern } from '../../utils/constants';
 function MovieCard({ page, savedMovies, handleSaveMovie, handleDeleteMovie, movie }) {
   const [buttonType, setButtonType] = useState('');
   const [isSaved, setIsSaved] = useState(false);
+  const [savedMovieId, setSavedMovieId] = useState('');
 
   const thumb = movie.image.url ? beatFilmApiURL + movie.image.url : movie.image;
   const title = movie.nameRU;
@@ -17,7 +18,12 @@ function MovieCard({ page, savedMovies, handleSaveMovie, handleDeleteMovie, movi
 
   useEffect(() => {
     if (savedMovies && page !== 'saved-movies') {
-      setIsSaved(savedMovies.some(item => item.movieId === movie.id));
+      savedMovies.some((item) => {
+        if(item.movieId === movie.id) {
+          setIsSaved(true);
+          setSavedMovieId(item._id);
+        }
+      })
     }
   }, [page, savedMovies, movie.id]);
 
@@ -33,7 +39,7 @@ function MovieCard({ page, savedMovies, handleSaveMovie, handleDeleteMovie, movi
       </a>
       <div className="movie__footer">
         <h2 className="movie__title">{title}</h2>
-        <button className={`movie__button${buttonType ? ' movie__button_type_' + buttonType: ''}`} onClick={!buttonType ? () => handleSaveMovie(movie) : () => handleDeleteMovie(movie._id)}></button>
+        <button className={`movie__button${buttonType ? ' movie__button_type_' + buttonType: ''}`} onClick={!buttonType ? () => handleSaveMovie(movie) : () => handleDeleteMovie(movie._id || savedMovieId)}></button>
       </div>
       <p className="movie__duration">{durationHour}ч {durationMinute}м</p>
     </div>

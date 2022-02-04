@@ -9,7 +9,7 @@ function Search({
   onFilter,
   shortMovies,
   setShortMovies,
-  localData,
+  localFilteredMovies,
   isFiltered,
   isSavedFiltered
 }) {
@@ -20,9 +20,9 @@ function Search({
     resetForm({
       ...values,
       shortMovies: shortMovies,
-      searchWord: (localData && localData.searchWord) ? localData.searchWord : values.searchWord
-    }, errors, (localData && (localData.searchWord || shortMovies)) ? true : isValid);
-  }, [shortMovies, resetForm, currentUser, localData]);
+      searchWord: (localFilteredMovies && localFilteredMovies.searchWord) ? localFilteredMovies.searchWord : values.searchWord
+    }, errors, (localFilteredMovies && (localFilteredMovies.searchWord || shortMovies)) ? true : isValid);
+  }, [shortMovies, resetForm, currentUser, localFilteredMovies]);
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
@@ -32,7 +32,7 @@ function Search({
   const handleCheckBox = (e) => {
     e.target.classList.toggle('checkbox-stylized_enabled');
     setShortMovies(!shortMovies);
-    if (isFiltered && isValid) {
+    if (isFiltered) {
       values.shortMovies = !shortMovies;
       onFilter(values);
     }

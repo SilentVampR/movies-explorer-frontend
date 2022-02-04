@@ -6,7 +6,7 @@ class MyApi {
     this._headers = headers;
   }
 
-  _checkResponse(res, text) {
+  _checkResponse(res) {
     return res.ok ? res.json() : Promise.reject(res.status);
   }
 
@@ -17,7 +17,7 @@ class MyApi {
       headers: this._headers
     })
       .then(res => {
-        return this._checkResponse(res, 'Ошибка получения информации о пользователе с сервера');
+        return this._checkResponse(res);
       })
   }
 
@@ -32,7 +32,7 @@ class MyApi {
       headers: this._headers
     })
       .then(res => {
-        return this._checkResponse(res, 'Ошибка изменения информации пользователя');
+        return this._checkResponse(res);
       })
   }
 
@@ -43,7 +43,7 @@ class MyApi {
       headers: this._headers
     })
       .then(res => {
-        return this._checkResponse(res, 'Ошибка получения информации о пользователе с сервера');
+        return this._checkResponse(res);
       })
   }
 
@@ -70,7 +70,7 @@ class MyApi {
       headers: this._headers
     })
       .then(res => {
-        return this._checkResponse(res, 'Ошибка добавления фильма');
+        return this._checkResponse(res);
       })
   }
 
@@ -81,7 +81,7 @@ class MyApi {
       headers: this._headers
     })
       .then(res => {
-        return this._checkResponse(res, 'Ошибка удаления фильма с сервера');
+        return this._checkResponse(res);
       })
   }
 }

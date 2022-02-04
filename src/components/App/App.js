@@ -60,7 +60,7 @@ function App() {
 
   const [isFirstStart, setIsFirstStart] = useState(true); //При первой загрузке проверяем локальное хранилище на предмет поисковых данных
 
-  const [localData, setLocalData] = useState({}); // Локальные данные
+  const [localFilteredMovies, setLocalFilteredMovies] = useState({}); // Локальные данные
 
   const [cardsOnPage, setCardsOnPage] = useState(12); // Количество карточек на странице. Зависит от ширины экрана.
   const [step, setStep] = useState(3); // Количество карточек, которые появляются после нажатия кнопки Еще
@@ -141,30 +141,30 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      setLocalData(JSON.parse(localStorage.getItem('searchMovies')));
+      setLocalFilteredMovies(JSON.parse(localStorage.getItem('searchMovies')));
     }
   }, [isLoggedIn]);
 
   /* ПРОВЕРКА СООТВЕТСВИЯ ЛОКАЛЬНОГО ХРАНИЛИЩА ТЕКУЩЕМУ ПОЛЬЗОВАТЕЛЮ */
 
   useEffect(() => {
-    if (localData) {
-      if (localData.userId !== currentUser._id) {
+    if (localFilteredMovies) {
+      if (localFilteredMovies.userId !== currentUser._id) {
         localStorage.clear();
-        return setLocalData({});
+        return setLocalFilteredMovies({});
       }
     }
-  }, [localData]);
+  }, [localFilteredMovies]);
 
   /* ЕСЛИ ПОЛЬЗОВАТЕЛЬ БЫЛ АВТОРИЗОВАН И ИСПОЛЬЗОВАЛ ФИЛЬТРАЦИЮ - ЗАГРУЖАЕМ ПОСЛЕДНИЕ ЗНАЧЕНИЯ ФИЛЬТРА */
 
   useEffect(() => {
-    if (localData && isFirstStart && beatMovies.length > 0) {
+    if (localFilteredMovies && isFirstStart && beatMovies.length > 0) {
       setIsFirstStart(false);
-      setIsShortMovieSelected(localData.shortMovies);
-      onFilterMovies(localData);
+      setIsShortMovieSelected(localFilteredMovies.shortMovies);
+      onFilterMovies(localFilteredMovies);
     }
-  }, [isFirstStart, localData, beatMovies]);
+  }, [isFirstStart, localFilteredMovies, beatMovies]);
 
   /* РЕГИСТРАЦИЯ */
 
@@ -174,7 +174,7 @@ function App() {
       .then(() => auth.signIn({ email, password })
         .then((res) => {
           setIsLoggedIn(true);
-          setCurentUser({ name: res.name, email: res.email });
+          setCurentUser({ _id: res._id, name: res.name, email: res.email });
           history.push('/movies');
           toolTipHandler(false, 'Вы успешно зарегистрировались и авторизовались!');
         })
@@ -190,7 +190,7 @@ function App() {
     auth.signIn({ email, password })
       .then((res) => {
         setIsLoggedIn(true);
-        setCurentUser({ name: res.name, email: res.email });
+        setCurentUser({ _id: res._id, name: res.name, email: res.email });
         history.push('/movies');
       })
       .catch(err => toolTipHandler(true, getResponseError('signin', err)))
@@ -206,6 +206,7 @@ function App() {
       .catch(err => toolTipHandler(true, getResponseError('signout', err)))
       .finally(() => {
         history.push('/');
+        history.go(0);
       })
   }
 
@@ -259,7 +260,7 @@ function App() {
   }
 
   /* ЗАГРУЗКА КАРТОЧЕК С СЕРВЕРА BEATFILMS */
-
+console.log(isFirstStart);
   useEffect(() => {
     if (isLoggedIn) {
       setIsLoading(true);
@@ -278,12 +279,15 @@ function App() {
 
   const filterMovies = (films, searchWord, short) => {
     if (short) {
-      if (searchWord.length !== 0) {
+      if (searchWord && searchWord.length !== 0) {
         return films.filter((movie) => compareStrings(movie.nameRU, searchWord) && movie.duration <= 40);
       }
       return films.filter((movie) => movie.duration <= 40);
     }
-    return films.filter((movie) => compareStrings(movie.nameRU, searchWord));
+    if (searchWord && searchWord.length !== 0) {
+      return films.filter((movie) => compareStrings(movie.nameRU, searchWord));
+    }
+    return films;
   }
 
   const onFilterMovies = (data) => {
@@ -296,7 +300,7 @@ function App() {
       shortMovies: data.shortMovies,
       searchWord: data.searchWord
     }));
-    setLocalData(JSON.parse(localStorage.getItem('searchMovies')));
+    setLocalFilteredMovies(JSON.parse(localStorage.getItem('searchMovies')));
   }
 
   const onFilterSavedMovies = (data) => {
@@ -387,7 +391,7 @@ function App() {
                 onFilter={onFilterMovies}
                 shortMovies={isShortMovieSelected}
                 setShortMovies={setIsShortMovieSelected}
-                localData={localData}
+                localFilteredMovies={localFilteredMovies}
                 cardsOnPage={cardsOnPage}
                 handleShowMore={handleShowMore}
                 isFiltered={isFiltered}

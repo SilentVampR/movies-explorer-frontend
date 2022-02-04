@@ -10,7 +10,7 @@ function Movies({
   onFilter,
   shortMovies,
   setShortMovies,
-  localData,
+  localFilteredMovies,
   movies,
   isLoading,
   savedMovies,
@@ -27,7 +27,7 @@ function Movies({
         onFilter={onFilter}
         shortMovies={shortMovies}
         setShortMovies={setShortMovies}
-        localData={localData}
+        localFilteredMovies={localFilteredMovies}
         isFiltered={isFiltered}
       />
       <section className="movies">
@@ -37,7 +37,6 @@ function Movies({
           savedMovies={savedMovies}
           page="movies"
           shortMovies={shortMovies}
-          localData={localData}
           cardsOnPage={cardsOnPage}
           handleSaveMovie={handleSaveMovie}
           handleDeleteMovie={handleDeleteMovie}
