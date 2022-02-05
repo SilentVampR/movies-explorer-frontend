@@ -29,7 +29,8 @@ function App() {
 
   /* STATES */
   const [isLoading, setIsLoading] = useState(false); // Состояние загрузки данных
-  const [isSaving, setIsSaving] = useState(false); // Состояние сохранения карточки (в работе)
+  const [isSaving, setIsSaving] = useState(''); // Состояние сохранения карточки - ID карточки
+  const [isUnSaving, setIsUnSaving] = useState(''); // Состояние отмены сохранения карточки - ID карточки
   const [isFormSending, setIsFormSending] = useState(false); // Состояние отправки данных на сервер
 
   const [isAuthChecking, setIsAuthChecking] = useState(true); // Состояние проверки аутентификации. По умолчанию включено
@@ -76,11 +77,6 @@ function App() {
     window.addEventListener('resize', resize);
     return () => window.removeEventListener('resize', resize);
   }, []);
-
-  // const resize = () => {
-  //   setWindowWidth(window.innerWidth);
-  // }
-  // window.addEventListener('resize', resize);
 
   const toolTipHandler = (error, text) => {
     setIsInfoTooltipPopupOpen({
@@ -225,22 +221,24 @@ function App() {
   /* СОХРАНЕНИЕ И УДАЛЕНИЕ ФИЛЬМА ИЗ СОХРАНЕННЫХ */
 
   const handleSaveMovie = (data) => {
-    setIsSaving(true);
+    setIsSaving(data.id);
     myApi.addMovie(data)
       .then(res => setSavedMovies([res.data, ...savedMovies]))
       .catch(err => toolTipHandler(true, getResponseError('saveMovie', err)))
-      .finally(() => setIsSaving(false));
+      .finally(() => setIsSaving(''));
   }
 
-  const handleDeleteMovie = (id) => {
-    setIsSaving(true);
+  const handleDeleteMovie = (id, beatId) => {
+    setIsUnSaving(beatId);
     myApi.removeMovie(id)
-      .then(() => {
-        setSavedMovies(movies => movies.filter((movie) => movie._id !== id));
-        setFilteredSavedMovies(movies => movies.filter((movie) => movie._id !== id));
+      .then((res) => {
+        setSavedMovies(movies => movies.filter((movie) => movie._id !== res.data._id));
+        setFilteredSavedMovies(movies => movies.filter((movie) => movie._id !== res.data._id));
       })
-      .catch(err => toolTipHandler(true, getResponseError('removeMovie', err)))
-      .finally(() => setIsSaving(true));
+      .catch(err => {
+        toolTipHandler(true, getResponseError('removeMovie', err))
+      })
+      .finally(() => setIsUnSaving(''));
   }
 
   /* ОБРАБОТЧИКИ КНОПОК МЕНЮ */
@@ -260,7 +258,6 @@ function App() {
   }
 
   /* ЗАГРУЗКА КАРТОЧЕК С СЕРВЕРА BEATFILMS */
-console.log(isFirstStart);
   useEffect(() => {
     if (isLoggedIn) {
       setIsLoading(true);
@@ -306,7 +303,6 @@ console.log(isFirstStart);
   const onFilterSavedMovies = (data) => {
     setIsSavedFiltered(true);
     setFilteredSavedMovies(filterMovies(savedMovies, data.searchWord, data.shortMovies));
-    //setSavedMovies(filterMovies(savedMovies, data.searchWord, data.shortMovies));
   }
 
   /* PROFILE */
@@ -397,6 +393,8 @@ console.log(isFirstStart);
                 isFiltered={isFiltered}
                 handleSaveMovie={handleSaveMovie}
                 handleDeleteMovie={handleDeleteMovie}
+                isUnSaving={isUnSaving}
+                isSaving={isSaving}
               />
               <ProtectedRoute
                 path="/saved-movies"
@@ -413,6 +411,8 @@ console.log(isFirstStart);
                 handleDeleteMovie={handleDeleteMovie}
                 setIsSavedFiltered={setIsSavedFiltered}
                 isSavedFiltered={isSavedFiltered}
+                isUnSaving={isUnSaving}
+                isSaving={isSaving}
               />
               <ProtectedRoute
                 path="/profile"

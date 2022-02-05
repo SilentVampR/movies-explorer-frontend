@@ -14,34 +14,40 @@ function MoviesCardList({
   setIsSavedFiltered,
   isFiltered,
   isSavedFiltered,
+  isUnSaving,
+  isSaving
 }) {
   useEffect(() => {
-    if(setIsSavedFiltered){
+    if (setIsSavedFiltered) {
       setIsSavedFiltered(false)
     }
-  },[setIsSavedFiltered]);
+  }, [setIsSavedFiltered]);
   return (
     <>
       {isLoading ? <Preloader /> :
-        movies ? (
+        movies && (
           movies.length > 0 ? (
-          <div className="movies__container">
-            {
-              movies.slice(0, cardsOnPage).map((item) => (
-                <MovieCard
-                  key={item.id ? item.id : item.movieId}
-                  page={page}
-                  savedMovies={savedMovies}
-                  handleSaveMovie={handleSaveMovie}
-                  handleDeleteMovie={handleDeleteMovie}
-                  movie={item}
-                />
-              ))
-            }
-          </div>
-          ) : (isFiltered || isSavedFiltered) && <div className="movies__no-movies-text">Поиск не дал результатов</div>
-        ) :
-          <div className="movies__no-movies-text">Нет сохраненных фильмов</div>
+            <div className="movies__container">
+              {
+                movies.slice(0, cardsOnPage).map((item) => (
+                  <MovieCard
+                    key={item.id ? item.id : item.movieId}
+                    page={page}
+                    savedMovies={savedMovies}
+                    handleSaveMovie={handleSaveMovie}
+                    handleDeleteMovie={handleDeleteMovie}
+                    movie={item}
+                    isUnSaving={isUnSaving}
+                    isSaving={isSaving}
+                  />
+                ))
+              }
+            </div>
+          ) : (isFiltered || isSavedFiltered) ?
+            <div className="movies__no-movies-text">Поиск не дал результатов</div> :
+            page === 'saved-movies' &&
+            <div className="movies__no-movies-text">Нет сохраненных фильмов</div>
+        )
       }
     </>
   );

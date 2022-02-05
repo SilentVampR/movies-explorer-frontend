@@ -14,6 +14,8 @@ function SavedMovies({
   handleDeleteMovie,
   setIsSavedFiltered,
   isSavedFiltered,
+  isUnSaving,
+  isSaving
 }) {
   return (
     <>
@@ -31,7 +33,10 @@ function SavedMovies({
           handleDeleteMovie={handleDeleteMovie}
           setIsSavedFiltered={setIsSavedFiltered}
           isSavedFiltered={isSavedFiltered}
-          page="saved-movies" />
+          page="saved-movies"
+          isUnSaving={isUnSaving}
+          isSaving={isSaving}
+        />
       </section>
     </>
   );

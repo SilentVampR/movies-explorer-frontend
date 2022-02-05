@@ -2,8 +2,17 @@ import React, { useEffect, useState } from 'react';
 import './MovieCard.css';
 import { beatFilmApiURL, urlPattern } from '../../utils/constants';
 
-function MovieCard({ page, savedMovies, handleSaveMovie, handleDeleteMovie, movie }) {
+function MovieCard({
+  page,
+  savedMovies,
+  handleSaveMovie,
+  handleDeleteMovie,
+  movie,
+  isUnSaving,
+  isSaving
+}) {
   const [buttonType, setButtonType] = useState('');
+  const [loadingButtonClass, setLoadingButtonClass] = useState('');
   const [isSaved, setIsSaved] = useState(false);
   const [savedMovieId, setSavedMovieId] = useState('');
 
@@ -18,20 +27,53 @@ function MovieCard({ page, savedMovies, handleSaveMovie, handleDeleteMovie, movi
 
   useEffect(() => {
     if (savedMovies && page !== 'saved-movies') {
-      savedMovies.some((item) => {
-        if(item.movieId === movie.id) {
+      savedMovies.forEach((item) => {
+        if (item.movieId === movie.id) {
           setIsSaved(true);
           setSavedMovieId(item._id);
         }
       })
     }
-  }, [page, savedMovies, movie.id]);
+  }, [page, savedMovies, movie, isSaving]);
+
+  /* useEffect(() => {
+    if (page === 'movies') {
+      if (isUnSaving === movie.id) {
+        setIsSaved(false);
+      }
+    }
+  }, [isUnSaving, page, movie]) */
 
   useEffect(() => {
-    (page === 'movies' && isSaved) && setButtonType('saved');
-    (page === 'saved-movies') && setButtonType('delete');
-  }, [isSaved, page]);
-
+    if (page === 'movies') {
+      if (isSaved) {
+        setButtonType('saved');
+      } else {
+        setButtonType('');
+      }
+      if (isUnSaving === movie.id) {
+        setIsSaved(false);
+        setLoadingButtonClass(' movie__button_type_saving');
+      }
+      if(isSaving === movie.id) {
+        setLoadingButtonClass(' movie__button_type_saving');
+      }
+      if (!isUnSaving && !isSaving) {
+        setLoadingButtonClass('');
+      }
+    }
+    if (page === 'saved-movies') {
+      setButtonType('delete');
+      if (isUnSaving === movie.movieId) {
+        setLoadingButtonClass(' movie__button_type_deleting');
+      }
+      if (!isUnSaving) {
+        setLoadingButtonClass('');
+      }
+    }
+  }, [isSaved, page, isUnSaving, movie, isSaving]);
+  // console.log(isUnSaving);
+  // console.log(movie.id);
   return (
     <div className="movie">
       <a href={checkUrl(movie.trailerLink ? movie.trailerLink : movie.trailer)} className="movie__trailer-link" target="_blank" rel="noreferrer">
@@ -39,7 +81,12 @@ function MovieCard({ page, savedMovies, handleSaveMovie, handleDeleteMovie, movi
       </a>
       <div className="movie__footer">
         <h2 className="movie__title">{title}</h2>
-        <button className={`movie__button${buttonType ? ' movie__button_type_' + buttonType: ''}`} onClick={!buttonType ? () => handleSaveMovie(movie) : () => handleDeleteMovie(movie._id || savedMovieId)}></button>
+        <button
+          className={`movie__button${buttonType ? ' movie__button_type_' + buttonType : ''}${loadingButtonClass}`}
+          onClick={!buttonType ? () => handleSaveMovie(movie) : () => handleDeleteMovie(movie._id || savedMovieId, movie.id || movie.movieId)}
+          disabled={(!isUnSaving && !isSaving) ? false : true}
+        >
+        </button>
       </div>
       <p className="movie__duration">{durationHour}ч {durationMinute}м</p>
     </div>

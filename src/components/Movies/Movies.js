@@ -19,6 +19,8 @@ function Movies({
   isFiltered,
   handleSaveMovie,
   handleDeleteMovie,
+  isUnSaving,
+  isSaving
 }) {
   return (
     <>
@@ -41,6 +43,8 @@ function Movies({
           handleSaveMovie={handleSaveMovie}
           handleDeleteMovie={handleDeleteMovie}
           isFiltered={isFiltered}
+          isUnSaving={isUnSaving}
+          isSaving={isSaving}
         />
         <ShowMore
           handleShowMore={handleShowMore}
