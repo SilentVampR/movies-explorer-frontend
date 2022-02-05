@@ -27,12 +27,13 @@ function MovieCard({
 
   useEffect(() => {
     if (savedMovies && page !== 'saved-movies') {
-      savedMovies.forEach((item) => {
-        if (item.movieId === movie.id) {
-          setIsSaved(true);
+      setIsSaved(savedMovies.some((item) => {
+        if(item.movieId === movie.id) {
           setSavedMovieId(item._id);
+          return true;
         }
-      })
+        return false;
+      }));
     }
   }, [page, savedMovies, movie, isSaving]);
 
