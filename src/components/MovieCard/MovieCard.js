@@ -36,14 +36,6 @@ function MovieCard({
     }
   }, [page, savedMovies, movie, isSaving]);
 
-  /* useEffect(() => {
-    if (page === 'movies') {
-      if (isUnSaving === movie.id) {
-        setIsSaved(false);
-      }
-    }
-  }, [isUnSaving, page, movie]) */
-
   useEffect(() => {
     if (page === 'movies') {
       if (isSaved) {
@@ -72,8 +64,7 @@ function MovieCard({
       }
     }
   }, [isSaved, page, isUnSaving, movie, isSaving]);
-  // console.log(isUnSaving);
-  // console.log(movie.id);
+
   return (
     <div className="movie">
       <a href={checkUrl(movie.trailerLink ? movie.trailerLink : movie.trailer)} className="movie__trailer-link" target="_blank" rel="noreferrer">

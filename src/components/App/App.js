@@ -128,7 +128,7 @@ function App() {
       })
       .catch(err => {
         setIsLoggedIn(false);
-        console.log(getResponseError('authcheck', err)); //Или вывести сообщением сразу? Подумаем...
+        console.log(getResponseError('authcheck', err));
       })
       .finally(() => setIsAuthChecking(false));
   }, []);
