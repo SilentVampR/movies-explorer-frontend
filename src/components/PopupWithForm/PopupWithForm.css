@@ -79,7 +79,7 @@
   }
 }
 
-.popup__form-container {
+.popup__form {
   position: relative;
   background-color: #202020;
   width: 88.125vw;
@@ -98,95 +98,41 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  height: unset;
 }
 
 @media screen and (min-width: 768px) {
-  .popup__form-container {
+  .popup__form {
     padding: 34px 36px 37px;
   }
 }
 
 .popup__title {
-  font-family: Inter, Arial, Helvetica, sans-serif;
-  font-weight: 500;
-  color: white;
-  text-align: center;
-  font-size: 18px;
-  line-height: 22px;
-  margin: 0 0 75px;
-  padding: 0;
+  margin: 0 0 54px;
 }
 
 @media screen and (min-width: 768px) {
   .popup__title {
     font-size: 24px;
     line-height: 29px;
-    margin-bottom: 54px;
+    margin-bottom: 75px;
+    text-align: center;
   }
 }
 
-.popup__input-container {
+.form__input-container {
   margin-bottom: 20px;
+  position: relative;
 }
 
-.popup__input-container:last-of-type {
+.form__input-container:last-of-type {
   margin-bottom: 45px;
 }
 
 @media screen and (min-width: 768px) {
-  .popup__input-container:last-of-type {
+  .form__input-container:last-of-type {
     margin-bottom: 48px;
   }
-}
-
-.popup__input-label {
-  display: block;
-  font-family: Inter, Arial, Helvetica, sans-serif;
-  font-size: 10px;
-  line-height: 12px;
-  color: #8B8B8B;
-  margin-bottom: 10px;
-}
-
-.popup__input {
-  font-family: Inter, Arial, Helvetica, sans-serif;
-  font-size: 13px;
-  line-height: 16px;
-  color: white;
-  background-color: #2F2F2F;
-  border: none;
-  border-radius: 8px;
-  height: 46px;
-  padding: 15px;
-  margin: 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.popup__input:focus {
-  outline: 2px solid #4285F4;
-}
-
-.popup__input_state_not-valid {
-  color: #EE3465;
-}
-
-.popup__text-error {
-  display: none;
-  font-family: Inter, Arial, Helvetica, sans-serif;
-  font-size: 10px;
-  line-height: 12px;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  top: calc(100% + 5px);
-  left: 0px;
-}
-
-.popup__text-error_state_not-valid {
-  display: block;
-  color: #EE3465;
-  z-index: 1;
 }
 
 .popup__submit-button {
@@ -200,7 +146,6 @@
   font-size: 14px;
   line-height: 17px;
   text-align: center;
-  /*margin-top: 45px;*/
 }
 
 .popup__submit-button:focus {
@@ -217,7 +162,7 @@
     min-height: 50px;
     font-size: 18px;
     line-height: 22px;
-    /*margin-top: 48px;*/
+    margin-top: auto;
   }
 }
 

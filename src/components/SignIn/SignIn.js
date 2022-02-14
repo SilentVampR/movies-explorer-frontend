@@ -1,26 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 import './SignIn.css';
 import Form from '../Form/Form';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
+function SignIn({ isSending, onSignIn, isLoggedIn }) {
+  const { values, errors, isValid, handleOnChange } = useFormWithValidation();
 
-function SignIn({ isSending, onSignIn }) {
-  const [data, setData] = useState({
-    email: '',
-    password: '',
-  })
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value
-    })
+  if (isLoggedIn) {
+    return <Redirect to="./" />
   }
 
-  const handleSubmit = (e) => {
+  const handleOnSubmit = (e) => {
     e.preventDefault();
-    const { email, password } = data;
-    onSignIn({ email, password });
+    onSignIn(values);
   }
 
   const fieldsList = [
@@ -29,40 +22,47 @@ function SignIn({ isSending, onSignIn }) {
       name: 'email',
       text: 'E-mail',
       type: 'email',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'minLength',
           parametr: 2,
         },
       ],
-      required: true,
+      required: true
     },
     {
       id: 2,
       name: 'password',
       text: 'Пароль',
       type: 'password',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'minLength',
           parametr: 2,
         },
       ],
-      required: true,
+      required: true
     }
   ];
   const textsList = {
     title: 'Рады видеть!',
-    button: 'Войти',
+    button: isSending ? 'Обработка...' : 'Войти',
     footerText: 'Еще не зарегистрированы?',
     linkTo: '/signup',
     linkText: 'Регистрация'
   }
   return (
     <section className="signin">
-      <Form fieldsList={fieldsList} isSending={isSending} textsList={textsList} onSubmit={handleSubmit} />
+      <Form
+        fieldsList={fieldsList}
+        isDisabled={isSending || !isValid}
+        textsList={textsList}
+        onSubmit={handleOnSubmit}
+        isValid={isValid}
+        errors={errors}
+      />
     </section>
   );
 }

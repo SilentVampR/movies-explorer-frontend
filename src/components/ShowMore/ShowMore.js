@@ -1,11 +1,11 @@
 import React from 'react';
 import './ShowMore.css';
 
-function ShowMore() {
-
+function ShowMore({ handleShowMore, cardsOnPage, movies }) {
+  const totalMovies = movies.length;
   return (
     <>
-      <button className="show-more-movies">Ещё</button>
+      {(totalMovies > cardsOnPage) && <button className="show-more-movies" onClick={handleShowMore}>Ещё</button>}
     </>
   );
 }

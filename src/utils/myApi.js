@@ -1,4 +1,4 @@
-import { myApiURL } from './constants';
+import { myApiURL, urlPattern, beatFilmApiURL } from './constants';
 
 class MyApi {
   constructor({ apiURL, headers }) {
@@ -6,8 +6,8 @@ class MyApi {
     this._headers = headers;
   }
 
-  _checkResponse(res, text) {
-    return res.ok ? res.json() : Promise.reject({ error: text, status: res.status });
+  _checkResponse(res) {
+    return res.ok ? res.json() : Promise.reject(res.status);
   }
 
   getUserInfo() {
@@ -17,33 +17,7 @@ class MyApi {
       headers: this._headers
     })
       .then(res => {
-        return this._checkResponse(res, 'Ошибка получения информации о пользователе с сервера');
-      })
-  }
-
-  addMovie(data) {
-    return fetch(this._apiURL + '/movies', {
-      credentials: 'include',
-      method: 'POST',
-      body: JSON.stringify({
-        name: data.name,
-        link: data.link,
-      }),
-      headers: this._headers
-    })
-      .then(res => {
-        return this._checkResponse(res, 'Ошибка добавления фильма');
-      })
-  }
-
-  removeMovie(id) {
-    return fetch(this._apiURL + '/movies/' + id, {
-      credentials: 'include',
-      method: 'DELETE',
-      headers: this._headers
-    })
-      .then(res => {
-        return this._checkResponse(res, 'Ошибка удаления фильма с сервера');
+        return this._checkResponse(res);
       })
   }
 
@@ -58,7 +32,56 @@ class MyApi {
       headers: this._headers
     })
       .then(res => {
-        return this._checkResponse(res, 'Ошибка изменения информации пользователя');
+        return this._checkResponse(res);
+      })
+  }
+
+  getSavedMovies() {
+    return fetch(`${this._apiURL}/movies`, {
+      credentials: 'include',
+      method: 'GET',
+      headers: this._headers
+    })
+      .then(res => {
+        return this._checkResponse(res);
+      })
+  }
+
+  addMovie(data) {
+    const trailerLink = urlPattern.test(data.trailerLink) ? data.trailerLink : 'https://youtu.be/dQw4w9WgXcQ';
+    const thumbnailUrl = beatFilmApiURL + data.image.formats.thumbnail.url;
+    const imageUrl = beatFilmApiURL + data.image.url;
+    return fetch(this._apiURL + '/movies', {
+      credentials: 'include',
+      method: 'POST',
+      body: JSON.stringify({
+        nameRU: data.nameRU,
+        nameEN: data.nameEN ? data.nameEN : data.nameRU,
+        movieId: data.id,
+        thumbnail: thumbnailUrl,
+        trailer: trailerLink,
+        image: imageUrl,
+        description: data.description,
+        year: data.year,
+        duration: data.duration,
+        director: data.director,
+        country: data.country ? data.country : 'Не указана',
+      }),
+      headers: this._headers
+    })
+      .then(res => {
+        return this._checkResponse(res);
+      })
+  }
+
+  removeMovie(id) {
+    return fetch(this._apiURL + '/movies/' + id, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: this._headers
+    })
+      .then(res => {
+        return this._checkResponse(res);
       })
   }
 }

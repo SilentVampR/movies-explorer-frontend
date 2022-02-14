@@ -4,13 +4,39 @@ import './SavedMovies.css';
 import Search from '../Search/Search';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
-function SavedMovies(props) {
-
+function SavedMovies({
+  isSending,
+  onFilter,
+  shortMovies,
+  setShortMovies,
+  movies,
+  isLoading,
+  handleDeleteMovie,
+  setIsSavedFiltered,
+  isSavedFiltered,
+  isUnSaving,
+  isSaving
+}) {
   return (
     <>
-      <Search />
+      <Search
+        isSending={isSending}
+        onFilter={onFilter}
+        shortMovies={shortMovies}
+        setShortMovies={setShortMovies}
+        isSavedFiltered={isSavedFiltered}
+      />
       <section className="movies">
-        <MoviesCardList films={props.films} isLoading={props.isLoading} page="saved-movies" />
+        <MoviesCardList
+          movies={movies}
+          isLoading={isLoading}
+          handleDeleteMovie={handleDeleteMovie}
+          setIsSavedFiltered={setIsSavedFiltered}
+          isSavedFiltered={isSavedFiltered}
+          page="saved-movies"
+          isUnSaving={isUnSaving}
+          isSaving={isSaving}
+        />
       </section>
     </>
   );

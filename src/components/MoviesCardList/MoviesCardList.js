@@ -1,27 +1,54 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './MoviesCardList.css';
 import MovieCard from '../MovieCard/MovieCard';
 import Preloader from '../Preloader/Preloader';
 
-function MoviesCardList(props) {
-  let step = 6;
+function MoviesCardList({
+  isLoading,
+  movies,
+  cardsOnPage,
+  page,
+  savedMovies,
+  handleSaveMovie,
+  handleDeleteMovie,
+  setIsSavedFiltered,
+  isFiltered,
+  isSavedFiltered,
+  isUnSaving,
+  isSaving
+}) {
+  useEffect(() => {
+    if (setIsSavedFiltered) {
+      setIsSavedFiltered(false)
+    }
+  }, [setIsSavedFiltered]);
   return (
     <>
-    {props.isLoading ? <Preloader /> :
-      <div className="movies__container">
-        {props.films.map((item) => (
-          (item.id <= step) &&
-          <MovieCard
-            key={item.id}
-            id={item.id}
-            title={item.nameRU}
-            duration={item.duration}
-            thumb={item.image.url}
-            page={props.page}
-            savedMovies={props.savedMovies}
-          />))}
-      </div>
-    }
+      {isLoading ? <Preloader /> :
+        movies && (
+          movies.length > 0 ? (
+            <div className="movies__container">
+              {
+                movies.slice(0, cardsOnPage).map((item) => (
+                  <MovieCard
+                    key={item.id ? item.id : item.movieId}
+                    page={page}
+                    savedMovies={savedMovies}
+                    handleSaveMovie={handleSaveMovie}
+                    handleDeleteMovie={handleDeleteMovie}
+                    movie={item}
+                    isUnSaving={isUnSaving}
+                    isSaving={isSaving}
+                  />
+                ))
+              }
+            </div>
+          ) : (isFiltered || isSavedFiltered) ?
+            <div className="movies__no-movies-text">Поиск не дал результатов</div> :
+            page === 'saved-movies' &&
+            <div className="movies__no-movies-text">Нет сохраненных фильмов</div>
+        )
+      }
     </>
   );
 }

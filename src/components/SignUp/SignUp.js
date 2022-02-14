@@ -1,26 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 import './SignUp.css';
 import Form from '../Form/Form';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
-function SignUp({ isSending, onSignUp }) {
-  const [data, setData] = useState({
-    email: '',
-    password: '',
-    error: ''
-  });
+function SignUp({ isSending, onSignUp, isLoggedIn }) {
+  const { values, errors, isValid, handleOnChange } = useFormWithValidation();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { name, email, password } = data;
-    onSignUp({ name, email, password });
+  if (isLoggedIn) {
+    return <Redirect to="./" />
   }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value
-    });
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    onSignUp(values);
   }
 
   const fieldsList = [
@@ -29,7 +22,7 @@ function SignUp({ isSending, onSignUp }) {
       name: 'name',
       text: 'Имя',
       type: 'text',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'maxLength',
@@ -39,6 +32,10 @@ function SignUp({ isSending, onSignUp }) {
           name: 'minLength',
           parametr: 2,
         },
+        {
+          name: 'pattern',
+          parametr: '[a-zA-Zа-яА-Я -]{1,}'
+        }
       ],
       required: true,
     },
@@ -47,7 +44,7 @@ function SignUp({ isSending, onSignUp }) {
       name: 'email',
       text: 'E-mail',
       type: 'email',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'minLength',
@@ -61,7 +58,7 @@ function SignUp({ isSending, onSignUp }) {
       name: 'password',
       text: 'Пароль',
       type: 'password',
-      handle: handleChange,
+      handle: handleOnChange,
       params: [
         {
           name: 'minLength',
@@ -73,7 +70,7 @@ function SignUp({ isSending, onSignUp }) {
   ];
   const textsList = {
     title: 'Добро пожаловать!',
-    button: 'Зарегистрироваться',
+    button: isSending ? 'Отправляется...' : 'Зарегистрироваться',
     footerText: 'Уже зарегистрированы?',
     linkTo: '/signin',
     linkText: 'Войти'
@@ -81,7 +78,14 @@ function SignUp({ isSending, onSignUp }) {
 
   return (
     <section className="signup">
-      <Form fieldsList={fieldsList} isSending={isSending} textsList={textsList} onSubmit={handleSubmit} />
+      <Form
+        fieldsList={fieldsList}
+        isDisabled={isSending || !isValid}
+        textsList={textsList}
+        onSubmit={handleOnSubmit}
+        isValid={isValid}
+        errors={errors}
+      />
     </section>
   );
 }

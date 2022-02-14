@@ -1,9 +1,9 @@
 import React from 'react';
 import './Checkbox.css';
 
-function Checkbox(props) {
+function Checkbox({ shortMovies, handleCheckBox }) {
   return (
-    <button className="checkbox-stylized" onClick={props.handleCheckBox}></button>
+    <button className={`checkbox-stylized${shortMovies ? ' checkbox-stylized_enabled' : ''}`} onClick={handleCheckBox}></button>
   );
 }
 

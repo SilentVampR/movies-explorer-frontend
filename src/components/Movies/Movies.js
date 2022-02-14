@@ -5,18 +5,52 @@ import Search from '../Search/Search';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import ShowMore from '../ShowMore/ShowMore';
 
-function Movies(props) {
+function Movies({
+  isSending,
+  onFilter,
+  shortMovies,
+  setShortMovies,
+  localFilteredMovies,
+  movies,
+  isLoading,
+  savedMovies,
+  cardsOnPage,
+  handleShowMore,
+  isFiltered,
+  handleSaveMovie,
+  handleDeleteMovie,
+  isUnSaving,
+  isSaving
+}) {
   return (
     <>
-      <Search />
+      <Search
+        isSending={isSending}
+        onFilter={onFilter}
+        shortMovies={shortMovies}
+        setShortMovies={setShortMovies}
+        localFilteredMovies={localFilteredMovies}
+        isFiltered={isFiltered}
+      />
       <section className="movies">
         <MoviesCardList
-          films={props.films}
-          isLoading={props.isLoading}
-          savedMovies={props.savedMovies}
+          movies={movies}
+          isLoading={isLoading}
+          savedMovies={savedMovies}
           page="movies"
+          shortMovies={shortMovies}
+          cardsOnPage={cardsOnPage}
+          handleSaveMovie={handleSaveMovie}
+          handleDeleteMovie={handleDeleteMovie}
+          isFiltered={isFiltered}
+          isUnSaving={isUnSaving}
+          isSaving={isSaving}
         />
-        <ShowMore />
+        <ShowMore
+          handleShowMore={handleShowMore}
+          cardsOnPage={cardsOnPage}
+          movies={movies}
+        />
       </section>
     </>
   );
