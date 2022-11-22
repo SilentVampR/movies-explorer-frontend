@@ -4,8 +4,6 @@
 
 Макет - https://yadi.sk/d/htdt53afEe2scg
 
-Домен проекта - https://silentvampr.nomoredomains.rocks
-
 **Основные маршруты приложения**
 - / - Главная страница
 - /movies - Страница поиска фильмов
@@ -15,3 +13,11 @@
 - /signup - Страница регистрации
 - /signout - Страница выхода
 - страница 404 для всех несуществующих страниц
+
+**Стек**
+
+HTML, CSS, JS, React, MongoDB, NodeJS, API
+
+<!--
+Домен проекта - https://silentvampr.nomoredomains.rocks
+-->
